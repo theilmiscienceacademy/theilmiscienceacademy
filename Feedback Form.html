@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I.L.M.I. Academy - Public Feedback Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .academy-header { text-align: center; border-bottom: 2px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 1.25rem; }
+        .academy-header img { width: 60px; height: 60px; border-radius: 50%; object-cover; }
+        .academy-name { font-size: 24px; font-weight: 700; color: #111827; }
+        select:disabled { background-color: #f3f4f6; cursor: not-allowed; }
+    </style>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
+    <div class="w-full max-w-2xl mx-auto bg-white p-6 md:p-8 rounded-xl shadow-lg">
+        <header class="academy-header">
+            <img src="https://i.postimg.cc/Dzz5bbVt/Picture1.jpg" alt="Logo">
+            <div>
+                <div class="academy-name">The I.L.M.I Academy</div>
+                <p class="text-gray-500">Student Feedback Form</p>
+            </div>
+        </header>
+        <div class="space-y-4">
+            <div>
+                <label for="class-select" class="block mb-1 font-medium text-gray-700">Select Class</label>
+                <select id="class-select" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" disabled>
+                    <option value="">Loading active classes...</option>
+                </select>
+            </div>
+            <div id="subject-select-wrapper">
+                <label for="subject-select" class="block mb-1 font-medium text-gray-700">Subject</label>
+                <select id="subject-select" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" disabled>
+                    <option value="">Please select a class first</option>
+                </select>
+            </div>
+            <div id="manual-subject-wrapper" class="hidden">
+                <label for="manual-subject-input" class="block mb-1 font-medium text-gray-700">Subject Name</label>
+                <input type="text" id="manual-subject-input" placeholder="Enter subject name..." class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+                <label for="feedback-textarea" class="block mb-1 font-medium text-gray-700">Your Feedback</label>
+                <textarea id="feedback-textarea" rows="5" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="Enter feedback here..."></textarea>
+            </div>
+            <button id="submit-btn" class="w-full bg-gray-800 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-900 transition-colors">Submit Feedback</button>
+            <p id="status-message" class="text-center h-5 mt-2"></p>
+        </div>
+    </div>
+
+    <script type="module">
+        // --- CONFIGURATION ---
+		const SUPABASE_URL = "https://psjxahilxeagnhwjkqlt.supabase.co";
+		const SUPABASE_KEY = "sb_publishable_37PP584twhFxXdKW0m0Vhg_vluSmQWH";
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        const registrationData = {
+            "classes": {
+                "9th": { "Science": { "subgroups": { "Biology Group": ["English", "Urdu", "Islamiat", "Physics", "Chemistry", "Biology", "Mathematics", "Tarjama Tul Quran"], "Computer Group": ["English", "Urdu", "Islamiat", "Physics", "Chemistry", "Computer Science", "Mathematics", "Tarjama Tul Quran"] }}, "Arts": { "subgroups": { "General Arts": ["English", "Urdu", "Islamiat", "Civics", "Education", "General Science", "General Mathematics", "Tarjama Tul Quran"] }}},
+                "10th": { "Science": { "subgroups": { "Biology Group": ["English", "Urdu", "Pakistan Studies", "Physics", "Chemistry", "Biology", "Mathematics", "Tarjama Tul Quran"], "Computer Group": ["English", "Urdu", "Pakistan Studies", "Physics", "Chemistry", "Computer Science", "Mathematics", "Tarjama Tul Quran"] }}, "Arts": { "subgroups": { "General Arts": ["English", "Urdu", "Pakistan Studies", "Civics", "Education", "General Science", "General Mathematics", "Tarjama Tul Quran"] }}},
+                "11th": { "F.Sc": { "subgroups": { "Pre-Medical": ["English", "Urdu", "Islamiat", "Physics", "Chemistry", "Biology", "Tarjama Tul Quran"], "Pre-Engineering": ["English", "Urdu", "Islamiat", "Physics", "Chemistry", "Mathematics", "Tarjama Tul Quran"] }}, "ICS": { "subgroups": { "Physics Group": ["English", "Urdu", "Islamiat", "Physics", "Mathematics", "Computer Science", "Tarjama Tul Quran"], "Statistics Group": ["English", "Urdu", "Islamiat", "Statistics", "Mathematics", "Computer Science", "Tarjama Tul Quran"] }}, "I.Com": { "subgroups": { "Commerce": ["English", "Urdu", "Islamiat", "Principles of Accounting", "Principles of Economics", "Business Mathematics", "Principles of Commerce", "Tarjama Tul Quran"] }}, "F.A": { "subgroups": { "Humanities": ["English", "Urdu", "Islamiat", "Civics", "Education", "Islamic Studies Elective", "Psychology", "Tarjama Tul Quran"] }}},
+                "12th": { "F.Sc": { "subgroups": { "Pre-Medical": ["English", "Urdu", "Pakistan Studies", "Physics", "Chemistry", "Biology", "Tarjama Tul Quran"], "Pre-Engineering": ["English", "Urdu", "Pakistan Studies", "Physics", "Chemistry", "Mathematics", "Tarjama Tul Quran"] }}, "ICS": { "subgroups": { "Physics Group": ["English", "Urdu", "Pakistan Studies", "Physics", "Mathematics", "Computer Science", "Tarjama Tul Quran"], "Statistics Group": ["English", "Urdu", "Pakistan Studies", "Statistics", "Mathematics", "Computer Science", "Tarjama Tul Quran"] }}, "I.Com": { "subgroups": { "Commerce": ["English", "Urdu", "Pakistan Studies", "Principles of Accounting", "Principles of Banking", "Business Statistics", "Commercial Geography", "Tarjama Tul Quran"] }}, "F.A": { "subgroups": { "Humanities": ["English", "Urdu", "Pakistan Studies", "Civics", "Education", "Psychology", "Fine Arts", "Tarjama Tul Quran"] }}}
+            }
+        };
+
+        const classSelect = document.getElementById('class-select');
+        const subjectSelect = document.getElementById('subject-select');
+        const subjectSelectWrapper = document.getElementById('subject-select-wrapper');
+        const manualSubjectInput = document.getElementById('manual-subject-input');
+        const manualSubjectWrapper = document.getElementById('manual-subject-wrapper');
+        const feedbackText = document.getElementById('feedback-textarea');
+        const submitBtn = document.getElementById('submit-btn');
+        const statusMessage = document.getElementById('status-message');
+
+        // 1. Fetch ALL active classes from ALL teachers.
+        document.addEventListener('DOMContentLoaded', async () => {
+            const { data: classes, error } = await supabase
+                .from('classes')
+                .select('class_name, user_id')
+                .order('class_name');
+
+            if (error || !classes || classes.length === 0) {
+                classSelect.innerHTML = '<option value="">No active classes found.</option>';
+                return;
+            }
+
+            classSelect.innerHTML = '<option value="">-- Select a Class --</option>';
+            classes.forEach(c => {
+                const option = document.createElement('option');
+                // The visible text is the class name.
+                option.textContent = c.class_name;
+                // The hidden value stores BOTH the name and the teacher's ID, separated by a pipe |.
+                option.value = `${c.class_name}|${c.user_id}`;
+                classSelect.appendChild(option);
+            });
+            classSelect.disabled = false;
+        });
+
+        // 2. When a class is selected, figure out which subjects to show.
+        classSelect.addEventListener('change', () => {
+            const selectedValue = classSelect.value;
+            const className = selectedValue.split('|')[0]; // Get the class name part.
+            
+            subjectSelect.innerHTML = '<option value="">-- Select a Subject --</option>';
+            subjectSelect.disabled = true;
+            manualSubjectInput.value = '';
+
+            if (!className) {
+                subjectSelectWrapper.classList.remove('hidden');
+                manualSubjectWrapper.classList.add('hidden');
+                return;
+            }
+
+            const classData = registrationData.classes[className];
+            if (classData) { // If subjects are predefined for this class...
+                subjectSelectWrapper.classList.remove('hidden');
+                manualSubjectWrapper.classList.add('hidden');
+
+                const allSubjects = Object.values(classData)
+                    .flatMap(type => Object.values(type.subgroups))
+                    .flatMap(group => group);
+                const uniqueSubjects = [...new Set(allSubjects)].sort();
+
+                uniqueSubjects.forEach(subject => {
+                    const option = document.createElement('option');
+                    option.value = subject;
+                    option.textContent = subject;
+                    subjectSelect.appendChild(option);
+                });
+                subjectSelect.disabled = false;
+            } else { // Otherwise, show the manual input field.
+                subjectSelectWrapper.classList.add('hidden');
+                manualSubjectWrapper.classList.remove('hidden');
+            }
+        });
+
+        // 3. When submitting, send the feedback to the correct teacher.
+        submitBtn.addEventListener('click', async () => {
+            const selectedValue = classSelect.value;
+            if (!selectedValue) {
+                statusMessage.textContent = "Please select a class.";
+                statusMessage.style.color = 'red';
+                return;
+            }
+            
+            const [className, formOwnerId] = selectedValue.split('|'); // Get both name and ID
+            let subject;
+
+            if (manualSubjectWrapper.classList.contains('hidden')) {
+                subject = subjectSelect.value;
+            } else {
+                subject = manualSubjectInput.value.trim();
+            }
+
+            const feedback = feedbackText.value.trim();
+
+            if (!subject || !feedback) {
+                statusMessage.textContent = "Please fill in all fields.";
+                statusMessage.style.color = 'red';
+                return;
+            }
+
+            statusMessage.textContent = "Submitting...";
+            statusMessage.style.color = 'black';
+            submitBtn.disabled = true;
+            
+            const { error } = await supabase.from('feedback_data').insert({
+                class: className,
+                subject: subject,
+                feedback: feedback,
+                user_id: formOwnerId // This ensures it goes to the right teacher!
+            });
+
+            if (error) {
+                statusMessage.textContent = "Error: " + error.message;
+                statusMessage.style.color = 'red';
+                submitBtn.disabled = false;
+            } else {
+                statusMessage.textContent = "✅ Feedback submitted successfully!";
+                statusMessage.style.color = 'green';
+                feedbackText.value = '';
+                subjectSelect.value = '';
+                manualSubjectInput.value = '';
+                classSelect.value = '';
+                subjectSelect.disabled = true;
+                subjectSelectWrapper.classList.remove('hidden');
+                manualSubjectWrapper.classList.add('hidden');
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
