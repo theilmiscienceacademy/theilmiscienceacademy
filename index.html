@@ -1521,8 +1521,9 @@
 <script type="module">
 	
 	// --- UNIFIED SUPABASE & APP STATE ---
-	const SUPABASE_URL = "https://gxvkfhdyujztqmvtieeh.supabase.co";
-	const SUPABASE_KEY = "sb_publishable_juurWV4JgcDY0IqfAcaBow_JXNsf3Yf";
+	const SUPABASE_URL = "https://yalakdknnafztkkxofxs.supabase.co";
+	// CORRECTED: Using the Anon Key (which starts with eyJ)
+	const SUPABASE_KEY = "sb_publishable_RuvfsijXFd8Lk3iL2VnVgw_FD_JxMCp";
 	const TABLES = ['students', 'results', 'attendance', 'holidays', 'classes', 'feedback_data', 'user_roles', 'teachers', 'teaching_logs', 'teacher_feedback'];
 	const USER_DATA_TABLES = ['students', 'results', 'attendance', 'holidays', 'classes', 'feedback_data', 'teachers', 'teaching_logs', 'teacher_feedback'];
 
@@ -1752,45 +1753,55 @@
     };
 
     // --- UNIFIED NAVIGATION ---
-    // NEW applyRoleBasedUI function with 3 roles
-    const applyRoleBasedUI = () => {
-        // Make sure we have a role before proceeding
-        if (!currentUserRole) return;
+    // RECOMMENDED: This version fixes the local file login issue while keeping security for logged-in users.
+	const applyRoleBasedUI = () => {
+		// If no one is logged in (e.g., on the login page or when connection fails locally)
+		if (!currentUser) {
+			// Specifically enable ONLY the login form elements
+			const emailInput = document.getElementById('auth-email');
+			const passwordInput = document.getElementById('auth-password');
+			const loginBtn = document.querySelector('#auth-form button[onclick="signInWithEmail()"]');
+			const signupBtn = document.querySelector('#auth-form button[onclick="signUpWithEmail()"]');
 
-        // --- Define Targets ---
-        const allInputs = document.querySelectorAll('input, textarea, select');
-        // Buttons that create or save data
-        const addSaveButtons = document.querySelectorAll('.btn-success, button[onclick*="save"], button[onclick*="add"], button[onclick*="submit"]');
-        // Buttons that delete or remove data
-        const deleteButtons = document.querySelectorAll('.btn-danger, button[onclick*="delete"]');
-        // Admin-only management button
-        const orgMgmtBtn = document.getElementById('org-management-btn');
+			if (emailInput) emailInput.disabled = false;
+			if (passwordInput) passwordInput.disabled = false;
+			if (loginBtn) { loginBtn.disabled = false; loginBtn.style.opacity = '1'; loginBtn.style.cursor = 'pointer'; }
+			if (signupBtn) { signupBtn.disabled = false; signupBtn.style.opacity = '1'; signupBtn.style.cursor = 'pointer'; }
+			
+			// Stop the function here so the rest of the lockdown doesn't happen
+			return;
+		}
 
-        // --- Reset All to a Default Restricted State ---
-        allInputs.forEach(el => el.disabled = true);
-        addSaveButtons.forEach(btn => { btn.disabled = true; btn.style.opacity = '0.6'; btn.style.cursor = 'not-allowed'; });
-        deleteButtons.forEach(btn => { btn.disabled = true; btn.style.opacity = '0.6'; btn.style.cursor = 'not-allowed'; });
-        if (orgMgmtBtn) orgMgmtBtn.classList.add('hidden');
+		// --- If a user IS logged in, proceed with the original security lockdown ---
+		
+		// --- Define Targets ---
+		const allInputs = document.querySelectorAll('input, textarea, select');
+		const addSaveButtons = document.querySelectorAll('.btn-success, button[onclick*="save"], button[onclick*="add"], button[onclick*="submit"]');
+		const deleteButtons = document.querySelectorAll('.btn-danger, button[onclick*="delete"]');
+		const orgMgmtBtn = document.getElementById('org-management-btn');
 
-        // --- Apply Permissions Based on Role ---
-        if (currentUserRole === 'viewer') {
-            // Viewers can't do anything, so the default restricted state is correct.
-            // We just need to make sure specific non-input elements are enabled (like filter dropdowns).
-            document.querySelectorAll('#class-filter, #batch-report-class-select, #batch-report-stream-select, #batch-report-group-select, #batch-report-term-select, #analytics-class-select, #analytics-stream-select, #analytics-group-select, #analytics-term-select, #feedback-class-filter, #feedback-subject-filter, #filter-teacher-select, #filter-class-select, #filter-subject-select, #filter-week-start').forEach(el => el.disabled = false); // Added teacher filters
+		// --- Reset All to a Default Restricted State ---
+		allInputs.forEach(el => el.disabled = true);
+		addSaveButtons.forEach(btn => { btn.disabled = true; btn.style.opacity = '0.6'; btn.style.cursor = 'not-allowed'; });
+		deleteButtons.forEach(btn => { btn.disabled = true; btn.style.opacity = '0.6'; btn.style.cursor = 'not-allowed'; });
+		if (orgMgmtBtn) orgMgmtBtn.classList.add('hidden');
 
-        } else if (currentUserRole === 'editor') {
-            // Editors can input data and save/add.
-            allInputs.forEach(el => el.disabled = false);
-            addSaveButtons.forEach(btn => { btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer'; });
-
-        } else if (currentUserRole === 'admin') {
-            // Admins can do everything.
-            allInputs.forEach(el => el.disabled = false);
-            addSaveButtons.forEach(btn => { btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer'; });
-            deleteButtons.forEach(btn => { btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer'; });
-            if (orgMgmtBtn) orgMgmtBtn.classList.remove('hidden');
-        }
-    };
+		// --- Apply Permissions Based on Role ---
+		if (currentUserRole === 'viewer') {
+			// Viewers can use filter dropdowns and navigation
+			document.querySelectorAll('#class-filter, #batch-report-class-select, #batch-report-stream-select, #batch-report-group-select, #batch-report-term-select, #analytics-class-select, #analytics-stream-select, #analytics-group-select, #analytics-term-select, #feedback-class-filter, #feedback-subject-filter, #filter-teacher-select, #filter-class-select, #filter-subject-select, #filter-week-start').forEach(el => el.disabled = false);
+		} else if (currentUserRole === 'editor') {
+			// Editors can input data and save/add.
+			allInputs.forEach(el => el.disabled = false);
+			addSaveButtons.forEach(btn => { btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer'; });
+		} else if (currentUserRole === 'admin') {
+			// Admins can do everything.
+			allInputs.forEach(el => el.disabled = false);
+			addSaveButtons.forEach(btn => { btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer'; });
+			deleteButtons.forEach(btn => { btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer'; });
+			if (orgMgmtBtn) orgMgmtBtn.classList.remove('hidden');
+		}
+	};
 
     // NEW navigateTo function with improved restriction handling
     window.navigateTo = (pageId) => {
@@ -6084,6 +6095,5 @@ window.addAttendanceToPreview = async () => {
 </script>
 </body>
 </html>
-
 
 
