@@ -43,7 +43,7 @@
 
         /* Card & UI Styles */
         .card { background-color: white; border-radius: 1rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.07), 0 4px 6px -2px rgba(0,0,0,0.05); }
-        .action-card { text-align: left; padding: 1.5rem; border-radius: 1rem; transition: all 0.2s ease; border: 1px solid #e5e7eb; }
+        .action-card { text-align: left; padding: 0.8rem; border-radius: 1rem; transition: all 0.2s ease; border: 1px solid #e5e7eb; }
         .action-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); border-color: transparent; }
         .status-toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: #1f2937; color: white; padding: 12px 24px; border-radius: 0.75rem; z-index: 1000; font-weight: 500; opacity: 0; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); transition: opacity 0.5s, transform 0.5s; pointer-events: none; }
         .status-toast.show { opacity: 1; transform: translateX(-50%) translateY(-10px); }
@@ -329,7 +329,7 @@
         }
     </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-white">
 
     <div id="page-1-login" class="page active items-center justify-center p-4">
         <div class="text-center space-y-6 w-full max-w-md card p-8 md:p-12">
@@ -344,7 +344,6 @@
                 <p id="auth-status" class="text-red-500 text-sm h-5"></p>
                 <div class="flex gap-4">
                     <button onclick="signInWithEmail()" class="btn btn-primary text-lg w-full">🔑 Login</button>
-                    <button onclick="signUpWithEmail()" class="btn btn-secondary text-lg w-full">✨ Create Account</button>
                 </div>
             </div>
             <div id="user-profile" class="hidden items-center justify-center flex-col space-y-4 pt-4">
@@ -355,83 +354,89 @@
         </div>
     </div>
 
-    <div id="page-2-main-dashboard" class="page items-center justify-center p-4">
-        <main class="w-full max-w-6xl mx-auto card p-8 md:p-12 text-center">
-            <h1 class="text-4xl font-bold text-gray-900 mb-2">Welcome to the Portal!</h1>
-            <p class="text-gray-600 mb-10">What would you like to manage today?</p>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <button onclick="navigateTo('page-student-registration')" class="action-card bg-indigo-50 hover:bg-indigo-100">
-                    <p class="text-4xl">🧑‍🎓</p>
-                    <h3 class="text-xl font-bold text-indigo-800 mt-2">Student Registration</h3>
-                    <p class="text-sm text-indigo-600">Register new students into the system.</p>
-                </button>
-                <button onclick="navigateTo('page-results-dashboard')" class="action-card bg-blue-50 hover:bg-blue-100">
-                    <p class="text-4xl">🏆</p>
-                    <h3 class="text-xl font-bold text-blue-800 mt-2">Results System</h3>
-                    <p class="text-sm text-blue-600">Manage student grades and marks.</p>
-                </button>
-                <button onclick="navigateTo('page-attendance-classes')" class="action-card bg-green-50 hover:bg-green-100">
-                    <p class="text-4xl">✍️</p>
-                    <h3 class="text-xl font-bold text-green-800 mt-2">Attendance System</h3>
-                    <p class="text-sm text-green-600">Track daily attendance and print sheets.</p>
-                </button>
-                 <button onclick="navigateTo('page-analytics-dashboard')" class="action-card bg-purple-50 hover:bg-purple-100">
-                    <p class="text-4xl">📊</p>
-                    <h3 class="text-xl font-bold text-purple-800 mt-2">Subject Analytics</h3>
-                    <p class="text-sm text-purple-600">Analyze class performance data.</p>
-                </button>
-                <button onclick="navigateTo('page-feedback-system')" class="action-card bg-pink-50 hover:bg-pink-100">
-                    <p class="text-4xl">🗣️</p>
-                    <h3 class="text-xl font-bold text-pink-800 mt-2">Feedback System</h3>
-                    <p class="text-sm text-pink-600">Manage and generate feedback forms.</p>
-                </button>
-                 <button onclick="window.navigateTo('page-teacher-feedback')" class="action-card bg-purple-50 hover:bg-purple-100 relative">
-				    <p class="text-4xl">🗣️</p>
-					<h3 class="text-xl font-bold text-purple-800 mt-2">Teacher Suggestions</h3>
-					<p class="text-sm text-purple-600">Submit and review anonymous feedback.</p>
-					<span id="feedback-notification-badge" class="absolute top-2 right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full hidden">
-						0
-					</span>
+    <div id="page-2-main-dashboard" class="page items-center justify-start p-4">
+		<main class="w-full max-w-4xl mx-auto p-4 md:p-6"> <header class="academy-header">
+				<img src="https://i.postimg.cc/Dzz5bbVt/Picture1.jpg" alt="Logo" class="w-16 h-16">
+				<div>
+					<div class="academy-name" style="font-size: 28px;">The I.L.M.I Academy Science & Commerce</div>
+					<div class="academy-address">Kahna Nau, Lahore</div>
+				</div>
+			</header>
+			<hr class="mb-6 border-gray-200"> <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-left">
+
+				<button onclick="navigateTo('page-student-registration')" class="action-card bg-indigo-50 hover:bg-indigo-100">
+					<p class="text-3xl mb-2">🧑‍🎓</p>
+					<h3 class="text-base font-bold text-indigo-800">Student Registration</h3>
+					<p class="text-xs text-indigo-600">Register new students.</p>
 				</button>
-            </div>
-             <div class="mt-8 grid grid-cols-1 md:grid-cols-4 gap-6">
-                <button onclick="navigateTo('page-teacher-dashboard')" class="action-card bg-orange-50 hover:bg-orange-100">
-				<p class="text-4xl">👨‍🏫</p>
-				<h3 class="text-2xl font-bold text-orange-800 mt-2">Teacher Logs & Submissions</h3>
-				<p class="text-orange-600">Maintain weekly teaching records and faculty lists.</p>
-			</button>
-				<button onclick="navigateTo('page-student-sheets-class-select')" class="action-card bg-teal-50 hover:bg-teal-100">
-                    <p class="text-4xl">📋</p>
-                    <h3 class="text-2xl font-bold text-teal-800 mt-2">Student Sheets</h3>
-                    <p class="text-teal-600">Download branded student lists for any class.</p>
-                </button>
-				<button onclick="navigateTo('page-student-management')" class="action-card bg-orange-50 hover:bg-orange-100">
-					<p class="text-4xl">📚</p>
-					<h3 class="text-xl font-bold text-orange-800 mt-2">Student Management</h3>
-					<p class="text-sm text-orange-600">View, edit, and delete all student records.</p>
+				<button onclick="navigateTo('page-results-dashboard')" class="action-card bg-yellow-50 hover:bg-yellow-100 sm:col-span-2">
+					<p class="text-3xl mb-2">🏆</p>
+					<h3 class="text-base font-bold text-yellow-800">Results System</h3>
+					<p class="text-xs text-yellow-600">Manage grades, marks, and batch reports.</p>
 				</button>
-				<button onclick="navigateTo('page-student-term-report')" class="action-card bg-fuchsia-50 hover:bg-fuchsia-100">
-					<p class="text-4xl">📈</p>
-					<h3 class="text-xl font-bold text-fuchsia-800 mt-2">Student Term Growth</h3>
-					<p class="text-sm text-fuchsia-600">Compare individual student performance over terms.</p>
+				<button onclick="navigateTo('page-attendance-classes')" class="action-card bg-green-50 hover:bg-green-100">
+					<p class="text-3xl mb-2">✅</p>
+					<h3 class="text-base font-bold text-green-800">Attendance System</h3>
+					<p class="text-xs text-green-600">Track daily attendance.</p>
 				</button>
-                <button onclick="navigateTo('page-data-settings')" class="action-card bg-yellow-50 hover:bg-yellow-100">
-                    <p class="text-4xl">⚙️</p>
-                    <h3 class="text-2xl font-bold text-yellow-800 mt-2">App Data & Settings</h3>
-                    <p class="text-yellow-600">Backup, restore, or delete your cloud data.</p>
-                </button>
-                <button id="org-management-btn" onclick="navigateTo('page-organization-management')" class="action-card bg-zinc-50 hover:bg-zinc-100 hidden">
-                    <p class="text-4xl">🏫</p>
-                    <h3 class="text-2xl font-bold text-zinc-800 mt-2">Org Management</h3>
-                    <p class="text-zinc-600">Manage user roles and permissions.</p>
-                </button>
-                <button onclick="signOutUser()" class="action-card bg-gray-50 hover:bg-gray-100">
-                     <p class="text-4xl">🚪</p>
-                    <h3 class="text-2xl font-bold text-gray-800 mt-2">Logout</h3>
-                    <p class="text-gray-600">Sign out from the portal.</p>
-                </button>
-            </div>
-        </main>
+
+				<button onclick="navigateTo('page-analytics-dashboard')" class="action-card bg-purple-50 hover:bg-purple-100">
+					<p class="text-3xl mb-2">📊</p>
+					<h3 class="text-base font-bold text-purple-800">Subject Analytics</h3>
+					<p class="text-xs text-purple-600">Analyze class performance.</p>
+				</button>
+				<button onclick="navigateTo('page-feedback-system')" class="action-card bg-pink-50 hover:bg-pink-100">
+					<p class="text-3xl mb-2">🗣️</p>
+					<h3 class="text-base font-bold text-pink-800">Feedback System</h3>
+					<p class="text-xs text-pink-600">Manage feedback forms.</p>
+				</button>
+				<button onclick="window.navigateTo('page-teacher-feedback')" class="action-card bg-violet-50 hover:bg-violet-100 relative">
+					<p class="text-3xl mb-2">💡</p>
+					<h3 class="text-base font-bold text-violet-800">Teacher Suggestions</h3>
+					<p class="text-xs text-violet-600">Submit anonymous feedback.</p>
+					<span id="feedback-notification-badge" class="absolute top-3 right-3 hidden h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white">0</span>
+				</button>
+				<div class="action-card bg-cyan-50 hover:bg-cyan-100 relative p-0">
+					<div class="absolute top-2 right-2 flex gap-2 z-10">
+						<button onclick="navigateTo('page-student-sheets-class-select')" class="btn btn-secondary !p-1 text-xs" title="Download Sheet for a Specific Class">📄</button>
+						<button onclick="generateAllStudentSheets()" class="btn btn-secondary !p-1 text-xs" title="Download All Student Lists">📥</button>
+					</div>
+					<button onclick="navigateTo('page-student-management')" class="w-full h-full p-4 text-left">
+						<p class="text-3xl mb-2">📚</p>
+						<h3 class="text-base font-bold text-cyan-800">Student Management</h3>
+						<p class="text-xs text-cyan-600">Edit records and hierarchies.</p>
+					</button>
+				</div>
+				<button onclick="navigateTo('page-teacher-dashboard')" class="action-card bg-orange-50 hover:bg-orange-100 sm:col-span-2">
+					<p class="text-3xl mb-2">👨‍🏫</p>
+					<h3 class="text-base font-bold text-orange-800">Teacher Logs & Submissions</h3>
+					<p class="text-xs text-orange-600">Maintain weekly records and manage faculty.</p>
+				</button>
+				<button onclick="navigateTo('page-student-term-report')" class="action-card bg-fuchsia-50 hover:bg-fuchsia-100 sm:col-span-2">
+					<p class="text-3xl mb-2">📈</p>
+					<h3 class="text-base font-bold text-fuchsia-800">Student Term Growth</h3>
+					<p class="text-xs text-fuchsia-600">Compare individual student performance.</p>
+				</button>
+
+				<div class="sm:col-span-2 md:col-span-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
+					<button onclick="navigateTo('page-data-settings')" class="action-card bg-slate-50 hover:bg-slate-100">
+						<p class="text-3xl mb-2">⚙️</p>
+						<h3 class="text-base font-bold text-slate-800">App Data & Settings</h3>
+						<p class="text-xs text-slate-600">Backup and restore data.</p>
+					</button>
+					<button id="org-management-btn" onclick="navigateTo('page-organization-management')" class="action-card bg-zinc-50 hover:bg-zinc-100 hidden">
+						<p class="text-3xl mb-2">🏫</p>
+						<h3 class="text-base font-bold text-zinc-800">Org Management</h3>
+						<p class="text-xs text-zinc-600">Manage user roles.</p>
+					</button>
+					<button onclick="signOutUser()" class="action-card bg-stone-50 hover:bg-stone-100">
+						<p class="text-3xl mb-2">🚪</p>
+						<h3 class="text-base font-bold text-stone-800">Logout</h3>
+						<p class="text-xs text-stone-600">Sign out from the portal.</p>
+					</button>
+				</div>
+			</div>
+		</main>
     </div>
 
     <div id="page-results-dashboard" class="page items-center justify-center p-4">
@@ -575,14 +580,17 @@
             </div>
             <div class="max-h-[50vh] overflow-y-auto">
                 <table class="w-full text-sm text-left text-gray-500">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-100 sticky top-0">
-                        <tr>
-                            <th scope="col" class="px-6 py-3">Roll No.</th>
-                            <th scope="col" class="px-6 py-3">Student Name</th>
-                            <th scope="col" class="px-6 py-3">Selected Subject</th>
-                            <th scope="col" class="px-6 py-3 w-48">Obtained Marks</th>
-                        </tr>
-                    </thead>
+						<thead class="text-xs text-gray-700 uppercase bg-gray-100 sticky top-0">
+							<tr>
+								<th class="px-2 py-3 w-10">Sr.</th>
+								<th class="px-2 py-3 w-1/4">Student Info</th>
+								<th class="px-2 py-3 w-1/4">Contact Info</th>
+								<th class="px-2 py-3">Class</th>
+								<th class="px-2 py-3">Stream</th>
+								<th class="px-2 py-3">Group</th>
+								<th class="px-2 py-3 w-20 text-center">Actions</th>
+							</tr>
+						</thead>
                     <tbody id="batch-marks-table-body"></tbody>
                 </table>
             </div>
@@ -656,8 +664,8 @@
     </div>
 
     <div id="page-attendance-classes" class="page">
-        <main class="flex-grow flex flex-col items-center justify-center p-4">
-            <div class="text-center w-full max-w-2xl mx-auto card p-8 md:p-12">
+        <main class="flex-grow flex flex-col items-center justify-start md:justify-center p-4">
+            <div class="text-center w-full max-w-lg mx-auto card p-6">
                 <h1 class="text-4xl font-bold text-gray-900 mb-8">✍️ Select a Class for Attendance</h1>
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                     <button onclick="selectClassForAttendance('8th')" class="btn btn-secondary text-xl py-8 flex-col gap-2">🎓 <span class="text-base">8th</span></button>
@@ -1227,7 +1235,7 @@
 		</div>
 	</div>
 
-    <div id="page-data-settings" class="page items-center justify-center p-4">
+    <div id="page-data-settings" class="page items-center justify-start p-4">
         <main class="w-full max-w-2xl mx-auto card p-8 md:p-10">
             <div class="flex justify-between items-start mb-8">
                 <div>
@@ -1300,6 +1308,9 @@
                     <h1 class="text-3xl font-bold text-gray-900">🏫 Organization Management</h1>
                     <button onclick="navigateTo('page-2-main-dashboard')" class="btn btn-secondary">⬅️ Back to Portal</button>
                 </div>
+				<div class="border-b pb-4 mb-6">
+					<button onclick="window.navigateTo('modal-invite-user')" class="btn btn-success">➕ Create New User Account</button>
+				</div>
                 <div class="input-group">
                     <label for="org-user-search">🔍 Search by Email</label>
                     <input type="text" id="org-user-search" onkeyup="orgMgmt_filterUsers()" placeholder="Enter user email to filter..." class="w-full md:w-1/2 p-3 border rounded-lg">
@@ -1357,7 +1368,8 @@
 			<h1 class="text-3xl font-bold text-gray-800 mb-8">👨‍🏫 Teacher Management Portal</h1>
 			<div class="grid grid-cols-1 gap-6">
 				<button onclick="navigateTo('page-teacher-log-entry')" class="btn btn-primary text-lg py-4">➕ Add Weekly Teaching Log</button>
-				<button onclick="loadAndDisplayTeachingLogs()" class="btn btn-secondary text-lg py-4">📂 View All Saved Logs</button>
+				<button onclick="loadAndDisplayTeachingLogs()" class="btn btn-secondary text-lg py-4">📂 View Saved Logs</button>
+				<button onclick="navigateTo('page-teacher-log-print')" class="btn btn-secondary text-lg py-4">🖨️ Print Saved Logs</button>
 				<button onclick="navigateTo('page-teacher-faculty-management')" class="btn btn-secondary text-lg py-4">🧑‍💼 Manage Faculty List</button>
 			</div>
 			<button onclick="navigateTo('page-2-main-dashboard')" class="btn btn-secondary mt-12 w-full">⬅️ Back to Portal</button>
@@ -1521,9 +1533,9 @@
 <script type="module">
 	
 	// --- UNIFIED SUPABASE & APP STATE ---
-	const SUPABASE_URL = "https://yalakdknnafztkkxofxs.supabase.co";
+	const SUPABASE_URL = "https://psjxahilxeagnhwjkqlt.supabase.co";
 	// CORRECTED: Using the Anon Key (which starts with eyJ)
-	const SUPABASE_KEY = "sb_publishable_RuvfsijXFd8Lk3iL2VnVgw_FD_JxMCp";
+	const SUPABASE_KEY = "sb_publishable_37PP584twhFxXdKW0m0Vhg_vluSmQWH";
 	const TABLES = ['students', 'results', 'attendance', 'holidays', 'classes', 'feedback_data', 'user_roles', 'teachers', 'teaching_logs', 'teacher_feedback'];
 	const USER_DATA_TABLES = ['students', 'results', 'attendance', 'holidays', 'classes', 'feedback_data', 'teachers', 'teaching_logs', 'teacher_feedback'];
 
@@ -1612,6 +1624,25 @@
     };
 
     const gradingScale = [{ percentage: 90, grade: 'A+', remarks: "Exceptional" }, { percentage: 80, grade: 'A', remarks: "Excellent" }, { percentage: 70, grade: 'B', remarks: "Very Good" }, { percentage: 60, grade: 'C', remarks: "Good" }, { percentage: 50, grade: 'D', remarks: "Fair" }, { percentage: 40, grade: 'E', remarks: "Satisfactory (Pass)" }, { percentage: 0, grade: 'F', remarks: "Fail" }];
+
+	// Add this code block to your main script
+
+	document.addEventListener('visibilitychange', () => {
+		// This checks if the user has returned to this browser tab
+		if (document.visibilityState === 'visible') {
+			
+			// We only want to refresh the data if the user is on the correct page
+			if (currentPageId === 'page-teacher-feedback') {
+				console.log("Tab became visible, refreshing feedback...");
+				showToast("🔄 Syncing feedback...", "info");
+				loadTeacherFeedback();
+			}
+			// You could add more 'if' statements here for other pages in the future
+			// if (currentPageId === 'some-other-page') {
+			//     loadSomeOtherData();
+			// }
+		}
+	});
 
     // --- INITIALIZATION & AUTHENTICATION ---
     document.addEventListener('DOMContentLoaded', async () => {
@@ -1723,34 +1754,116 @@
         }
     };
 
-    window.signUpWithEmail = async () => {
-        const email = document.getElementById('auth-email').value;
-        const password = document.getElementById('auth-password').value;
-        if (!email || !password) return authStatus.textContent = "Email and password are required.";
-        if (password.length < 6) return authStatus.textContent = "Password must be at least 6 characters.";
-        authStatus.textContent = "Creating account...";
-        const { data, error } = await supabase.auth.signUp({ email, password });
-        if (error) {
-            authStatus.textContent = error.message;
-        } else {
-            // NEW: Add new user to user_roles table on signup
-            const { error: roleError } = await supabase.from('user_roles').insert({
-                user_id: data.user.id,
-                email: email,
-                role: 'viewer' // Default role
-            });
-            if (roleError) {
-                authStatus.textContent = "Signup succeeded, but failed to set role.";
-            } else {
-                authStatus.textContent = "Success! Check your email for verification.";
-                showToast("Account created!");
-            }
-        }
-    };
+	// ADD THIS NEW, CORRECT FUNCTION
+	window.orgMgmt_createNewUser = async () => {
+		const email = document.getElementById('invite-email').value;
+		const password = document.getElementById('invite-password').value;
+		const role = document.getElementById('invite-role').value;
+
+		if (!email || !password || !role) {
+			return showToast("Email, password, and role are required.", "error");
+		}
+		if (password.length < 6) {
+			return showToast("Password must be at least 6 characters.", "error");
+		}
+
+		showToast(`Creating account for ${email}...`, 'info');
+
+		try {
+			// Step 1: Use the PUBLIC signUp function. This is allowed from the browser.
+			// Because you turned off "Confirm email" in Supabase, this user will be active immediately.
+			const { data: userData, error: userError } = await supabase.auth.signUp({
+				email: email,
+				password: password 
+			});
+
+			if (userError) throw userError;
+			
+			const newUser = userData.user;
+			if (!newUser) throw new Error("User was created but could not be found.");
+
+			// Step 2: Now, use YOUR ADMIN permissions to insert the new user's role.
+			// Your RLS policy will check if YOU are an admin and allow this.
+			const { error: roleError } = await supabase.from('user_roles').insert({
+				user_id: newUser.id,
+				email: email,
+				role: role
+			});
+
+			if (roleError) {
+				// This error means your RLS policy is not set up correctly.
+				throw new Error("User created, but role could not be set. Check RLS policies.");
+			}
+
+			showToast(`Account created for ${email} with role: ${role}.`, 'success');
+			navigateTo('page-organization-management');
+			orgMgmt_initializePage(); // Refresh the user list
+
+		} catch (error) {
+			console.error("Error creating user:", error);
+			showToast(`Failed to create user: ${error.message}`, "error");
+		}
+	};
 
     window.signOutUser = async () => {
         await supabase.auth.signOut();
     };
+
+	// ADD THIS NEW, REUSABLE FUNCTION TO YOUR SCRIPT
+
+	async function downloadReportAsPDF(elementId, filename = 'report.pdf') {
+		const displayArea = document.getElementById(elementId);
+		if (!displayArea) {
+			console.error(`PDF Error: Element with ID "${elementId}" not found.`);
+			return showToast("Failed to generate PDF: Element not found.", "error");
+		}
+
+		showToast('Creating PDF... Please wait.', 'info');
+
+		try {
+			// 1. Initialize jsPDF
+			const { jsPDF } = window.jspdf;
+			const doc = new jsPDF({
+				orientation: 'p', // portrait
+				unit: 'mm',
+				format: 'a4'
+			});
+
+			// 2. Use html2canvas to "photograph" your report
+			const canvas = await html2canvas(displayArea, {
+				scale: 2, // Higher scale for better quality
+				useCORS: true
+			});
+
+			// 3. Add the "photograph" to the PDF
+			const imgData = canvas.toDataURL('image/png');
+			const imgProps = doc.getImageProperties(imgData);
+			const pdfWidth = doc.internal.pageSize.getWidth() - 20; // 10mm margin on each side
+			const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+			let heightLeft = pdfHeight;
+			let position = 10; // 10mm top margin
+
+			doc.addImage(imgData, 'PNG', 10, position, pdfWidth, pdfHeight);
+			heightLeft -= (doc.internal.pageSize.getHeight() - 20);
+
+			// 4. Add new pages if the content is too long
+			while (heightLeft > 0) {
+				position = heightLeft - pdfHeight - 10; // 10mm margin
+				doc.addPage();
+				doc.addImage(imgData, 'PNG', 10, position, pdfWidth, pdfHeight);
+				heightLeft -= doc.internal.pageSize.getHeight();
+			}
+
+			// 5. Trigger the download
+			doc.save(filename);
+			
+			showToast('🚀 PDF download started!', 'success');
+
+		} catch (e) {
+			console.error("Error generating PDF:", e);
+			showToast("Failed to generate PDF.", "error");
+		}
+	}
 
     // --- UNIFIED NAVIGATION ---
     // RECOMMENDED: This version fixes the local file login issue while keeping security for logged-in users.
@@ -1843,6 +1956,8 @@
 		
 		if (pageId === 'page-student-management') { initializeStudentManagement(); } 
 		// 👆 END OF INSERT 👆
+		
+		if (pageId === 'page-teacher-log-print') { initializePrintLogPage(); }
 		
 		if (pageId === 'page-teacher-log-entry' || pageId === 'page-teacher-faculty-management' || pageId === 'page-teacher-dashboard' || pageId === 'modal-log-filter' || pageId === 'modal-assign-hierarchy') {
         // ...
@@ -3414,6 +3529,28 @@ window.addAttendanceToPreview = async () => {
         }
     };
 
+	// ADD THIS NEW FUNCTION TO YOUR SCRIPT
+	window.updateRowHierarchies = (selectElement) => {
+		const row = selectElement.closest('tr');
+		const classSelect = row.querySelector('.class-select');
+		const streamSelect = row.querySelector('.stream-select');
+		const groupSelect = row.querySelector('.group-select');
+
+		const className = classSelect.value;
+		const streamName = streamSelect.value;
+
+		if (selectElement.classList.contains('class-select')) {
+			const streams = Object.keys(registrationData.classes[className] || {});
+			streamSelect.innerHTML = streams.map(s => `<option value="${s}">${s}</option>`).join('');
+			const firstStream = streams[0];
+			const groups = Object.keys(registrationData.classes[className]?.[firstStream]?.subgroups || {});
+			groupSelect.innerHTML = groups.map(g => `<option value="${g}">${g}</option>`).join('');
+		} else if (selectElement.classList.contains('stream-select')) {
+			const groups = Object.keys(registrationData.classes[className]?.[streamName]?.subgroups || {});
+			groupSelect.innerHTML = groups.map(g => `<option value="${g}">${g}</option>`).join('');
+		}
+	};
+
     /**************************************************************************/
     /* ATTENDANCE APP LOGIC                                                   */
     /**************************************************************************/
@@ -4286,7 +4423,7 @@ window.addAttendanceToPreview = async () => {
 		).join('');
 	};
 
-	// 2. Rendering the Table
+	// REPLACE THE ENTIRE FUNCTION WITH THIS
 	const renderStudentsList = (students) => {
 		const tableBody = document.getElementById('student-management-table-body');
 		if (students.length === 0) {
@@ -4294,28 +4431,48 @@ window.addAttendanceToPreview = async () => {
 			return;
 		}
 
+		const classOptions = Object.keys(registrationData.classes).map(c => `<option value="${c}">${c}</option>`).join('');
+
 		tableBody.innerHTML = students.map((student, index) => {
-			const uniqueId = `student-${student.roll_no}-${student.class_name.replace(/ /g, '')}`;
-			const programDisplay = student.class_type && student.subgroup 
-				? `${student.class_type} (${student.subgroup})` 
-				: 'N/A';
-			
+			const uniqueId = `student-row-${student.id}`;
+			const classTypeOptions = student.class_name ? Object.keys(registrationData.classes[student.class_name] || {}).map(ct => `<option value="${ct}" ${student.class_type === ct ? 'selected' : ''}>${ct}</option>`).join('') : '';
+			const subgroupOptions = student.class_name && student.class_type ? Object.keys(registrationData.classes[student.class_name]?.[student.class_type]?.subgroups || {}).map(sg => `<option value="${sg}" ${student.subgroup === sg ? 'selected' : ''}>${sg}</option>`).join('') : '';
+
 			return `
-				<tr id="${uniqueId}" data-id="${student.id}" data-roll="${student.roll_no}" data-class="${student.class_name}" class="border-b hover:bg-gray-50">
-					<td class="px-4 py-2 text-center">${index + 1}</td>
-					<td class="px-4 py-2"><input type="text" class="w-full p-1 border rounded-md roll-input" value="${student.roll_no}" data-original="${student.roll_no}"></td>
-					<td class="px-4 py-2"><input type="text" class="w-full p-1 border rounded-md name-input" value="${student.name}" data-original="${student.name}"></td>
-					<td class="px-4 py-2"><input type="text" class="w-full p-1 border rounded-md fname-input" value="${student.fname}" data-original="${student.fname}"></td>
-					
-					<td class="px-4 py-2">
-						<div class="text-xs font-semibold">${student.class_name}</div>
-						<div class="text-xs text-gray-500">${programDisplay}</div>
+				<tr id="${uniqueId}" data-id="${student.id}" class="border-b hover:bg-gray-50 align-top">
+					<td class="px-2 py-3 text-center">${index + 1}</td>
+					<td class="px-2 py-3">
+						<label class="text-xs font-semibold">Name</label>
+						<input type="text" class="w-full p-1 border rounded-md name-input" value="${student.name}">
+						<label class="text-xs font-semibold mt-1 block">Father's Name</label>
+						<input type="text" class="w-full p-1 border rounded-md fname-input" value="${student.fname}">
 					</td>
-					
-					<td class="px-4 py-2"><input type="text" class="w-full p-1 border rounded-md contact-input" value="${student.contact || ''}" data-original="${student.contact || ''}"></td>
-					
-					<td class="px-4 py-2 text-center">
-						<button onclick="deleteStudent(${student.id}, '${student.name}')" class="btn btn-danger !p-1 text-xs">🗑️ Delete</button>
+					<td class="px-2 py-3">
+						<label class="text-xs font-semibold">Roll No.</label>
+						<input type="text" class="w-full p-1 border rounded-md roll-input" value="${student.roll_no}">
+						<label class="text-xs font-semibold mt-1 block">Contact</label>
+						<input type="text" class="w-full p-1 border rounded-md contact-input" value="${student.contact || ''}">
+					</td>
+					<td class="px-2 py-3">
+						<label class="text-xs font-semibold">Class</label>
+						<select class="w-full p-1 border rounded-md class-select" onchange="updateRowHierarchies(this)">
+							${classOptions.replace(`value="${student.class_name}"`, `value="${student.class_name}" selected`)}
+						</select>
+					</td>
+					<td class="px-2 py-3">
+						<label class="text-xs font-semibold">Stream</label>
+						<select class="w-full p-1 border rounded-md stream-select" onchange="updateRowHierarchies(this)">
+							${classTypeOptions}
+						</select>
+					</td>
+					<td class="px-2 py-3">
+						<label class="text-xs font-semibold">Group</label>
+						<select class="w-full p-1 border rounded-md group-select">
+							${subgroupOptions}
+						</select>
+					</td>
+					<td class="px-2 py-3 text-center">
+						<button onclick="deleteStudent(${student.id}, '${student.name}')" class="btn btn-danger !p-1 text-xs mt-4">🗑️</button>
 					</td>
 				</tr>
 			`;
@@ -4361,123 +4518,75 @@ window.addAttendanceToPreview = async () => {
 		filterStudentsList(); 
 	};
 
+	// REPLACE THE ENTIRE FUNCTION WITH THIS CORRECTED VERSION
 	window.saveAllStudentChanges = async () => {
-		if (!currentUser || !currentUser.id) {
-			showToast("Error: You must be logged in to save student data.", 'error');
-			return; 
-		}
-
 		showToast("Collecting changes...", 'info');
-		
-		const changes = [];
-		let processingError = false;
+		const changesToUpsert = [];
+		let hasError = false;
 
 		document.querySelectorAll('#student-management-table-body tr').forEach(row => {
-			if (processingError) return;
-			
-			const studentId = row.dataset.id; 
-			const originalStudent = allStudentsCache.find(s => s.id.toString() === studentId);
-			
+			if(hasError) return;
+
+			const id = parseInt(row.dataset.id); // We still need the ID to find the original data
+			const originalStudent = allStudentsCache.find(s => s.id === id);
 			if (!originalStudent) return;
 
-			let hasChanged = false;
-			
-			// **1. MANDATORY FIELDS (Must be included for the update to work):**
-			const updatedData = { 
-				id: originalStudent.id, 
-				user_id: currentUser.id,
-				// 🛑 FIX: Must include the original required values 🛑
-				class_name: originalStudent.class_name,
-				class_type: originalStudent.class_type, // Assuming required
-				subgroup: originalStudent.subgroup      // Assuming required
-			}; 
+			// Collect new values from the form
+			const newName = row.querySelector('.name-input').value.trim();
+			const newFname = row.querySelector('.fname-input').value.trim();
+			const newRollNo = row.querySelector('.roll-input').value.trim();
+			const newContact = row.querySelector('.contact-input').value.trim() || null;
+			const newClassName = row.querySelector('.class-select').value;
+			const newStream = row.querySelector('.stream-select').value;
+			const newGroup = row.querySelector('.group-select').value;
 
-			// **2. EDITABLE FIELDS:**
-			
-			// Check Roll Number
-			const rollInput = row.querySelector('.roll-input');
-			if (rollInput.value !== originalStudent.roll_no.toString()) { 
-				const newRoll = rollInput.value; 
-				
-				if (!newRoll.trim() || isNaN(parseInt(newRoll)) || parseInt(newRoll) <= 0) {
-					showToast(`Invalid Roll Number for ${originalStudent.name}.`, 'error');
-					processingError = true;
-					return; 
-				}
-				updatedData.roll_no = newRoll; // Send as string or number, depending on DB type
-				hasChanged = true;
-			} else {
-				// If not changed, ensure the original is used (already in updatedData but good practice)
-				updatedData.roll_no = originalStudent.roll_no;
-			}
-
-			// Check Name
-			const nameInput = row.querySelector('.name-input');
-			if (nameInput.value.trim() !== originalStudent.name) {
-				updatedData.name = nameInput.value.trim();
-				hasChanged = true;
-			} else {
-				updatedData.name = originalStudent.name;
-			}
-
-			// Check Father Name
-			const fnameInput = row.querySelector('.fname-input');
-			if (fnameInput.value.trim() !== originalStudent.fname) {
-				updatedData.fname = fnameInput.value.trim();
-				hasChanged = true;
-			} else {
-				updatedData.fname = originalStudent.fname;
+			if(!newName || !newRollNo || !newClassName || !newStream || !newGroup) {
+				showToast(`Error: Missing required fields for student "${originalStudent.name}".`, 'error');
+				hasError = true;
+				return;
 			}
 			
-			// Check Contact
-			const contactInput = row.querySelector('.contact-input');
-			const contactValue = contactInput.value.trim() || null; 
-			
-			if (contactValue !== (originalStudent.contact || null)) { 
-				updatedData.contact = contactValue;
-				hasChanged = true;
-			} else {
-				// Keep original contact value (which can be null)
-				updatedData.contact = originalStudent.contact; 
-			}
+			const newSubjects = registrationData.classes[newClassName]?.[newStream]?.subgroups?.[newGroup] || [];
 
-			// **3. Finalize and push to changes array**
-			if (hasChanged) {
-				changes.push(updatedData);
-			}
+			// *** THE FIX IS HERE: 'id' is REMOVED from the payload ***
+			const payload = {
+				// id: originalStudent.id, <-- REMOVED THIS LINE
+				name: newName,
+				fname: newFname,
+				roll_no: newRollNo,
+				contact: newContact,
+				class_name: newClassName,
+				class_type: newStream,
+				subgroup: newGroup,
+				subjects: newSubjects,
+				user_id: currentUser.id // Ensure user_id is included for RLS and onConflict
+			};
+			changesToUpsert.push(payload);
 		});
 
-		if (processingError || changes.length === 0) {
-			if (!processingError) showToast("No changes detected to save.", 'info');
-			return;
-		}
+		if(hasError) return;
+		if (changesToUpsert.length === 0) return showToast("No changes detected to save.", "info");
 
-		showToast(`Saving ${changes.length} updated records...`, 'primary');
+		showToast(`Saving ${changesToUpsert.length} records... This will override duplicates.`, 'primary');
 		
-		// Perform the upsert operation
-		const { error } = await supabase.from('students').upsert(changes, { onConflict: 'id' });
+		// The 'onConflict' option tells Supabase to find the row to update
+		// based *only* on these columns, now that 'id' is not sent.
+		const { error } = await supabase.from('students').upsert(changesToUpsert, {
+			onConflict: 'user_id,class_name,roll_no' 
+		});
 
 		if (error) {
-			console.error("Save error:", error);
-			if (error.message.includes('duplicate key') || error.code === '23505') {
-				return showToast("Failed to save. Check Roll Number/Class uniqueness.", 'error');
+			console.error("Save error:", error); // Log the full error
+			// Check for specific Supabase error codes if needed
+			if (error.code === '42501') { // RLS violation code
+				 return showToast("Save failed: Permission denied. Check RLS policies.", 'error');
 			}
-			return showToast("Failed to save changes. See console for details.", 'error');
+			return showToast(`Failed to save changes: ${error.message}`, 'error');
 		}
 
 		showToast("All changes saved successfully!", 'success');
-		initializeStudentManagement();
-		
-		// **1. MANDATORY FIELDS (Must be included for the update to work):**
-		const updatedData = { 
-			id: originalStudent.id, 
-			user_id: currentUser.id,
-			class_name: originalStudent.class_name,
-			class_type: originalStudent.class_type,
-			subgroup: originalStudent.subgroup
-		};
+		initializeStudentManagement(); // Refresh the list
 	};
-
     /**************************************************************************/
     /* ANALYTICS LOGIC                                                        */
     /**************************************************************************/
@@ -5145,6 +5254,118 @@ window.addAttendanceToPreview = async () => {
         return data;
     }
 
+
+	// PASTE THESE THREE NEW FUNCTIONS INTO YOUR SCRIPT TAG
+
+	const initializePrintLogPage = async () => {
+		await fetchFacultyList();
+		const teacherSelect = document.getElementById('print-log-teacher-select');
+		teacherSelect.innerHTML = '<option value="all">All Teachers</option>';
+		teacherSelect.innerHTML += facultyListCache.map(t => `<option value="${t.name}">${t.name}</option>`).join('');
+		populatePrintLogSubjects();
+	};
+
+	const populatePrintLogSubjects = () => {
+		const teacherName = document.getElementById('print-log-teacher-select').value;
+		const subjectSelect = document.getElementById('print-log-subject-select');
+		let allSubjects = new Set();
+
+		if (teacherName === 'all') {
+			facultyListCache.forEach(teacher => {
+				if (teacher.assigned_subjects) {
+					Object.values(teacher.assigned_subjects).forEach(subjects => subjects.forEach(s => allSubjects.add(s)));
+				}
+			});
+		} else {
+			const teacher = facultyListCache.find(t => t.name === teacherName);
+			if (teacher && teacher.assigned_subjects) {
+				 Object.values(teacher.assigned_subjects).forEach(subjects => subjects.forEach(s => allSubjects.add(s)));
+			}
+		}
+		
+		subjectSelect.innerHTML = '<option value="all">All Subjects</option>';
+		subjectSelect.innerHTML += [...allSubjects].sort().map(s => `<option value="${s}">${s}</option>`).join('');
+	};
+
+	// PASTE THIS ENTIRE FUNCTION INSIDE YOUR <script type="module"> TAG
+
+	// REPLACE THE OLD FUNCTION WITH THIS NEW, UPGRADED VERSION
+	window.generateAndPrintLogs = async () => {
+		const teacherName = document.getElementById('print-log-teacher-select').value;
+		const subjectName = document.getElementById('print-log-subject-select').value;
+		const startDate = document.getElementById('print-log-date-filter').value;
+		const displayArea = document.getElementById('log-print-display-area');
+
+		showToast('Fetching logs for printing...', 'info');
+
+		let query = supabase.from('teaching_logs').select('*').eq('user_id', currentUser.id);
+		if (teacherName !== 'all') query = query.eq('teacher_name', teacherName);
+		if (subjectName !== 'all') query = query.eq('subject_name', subjectName);
+		if (startDate) query = query.gte('week_start_date', startDate);
+		query = query.order('week_start_date', { ascending: false }).order('teacher_name');
+		
+		const { data: logs, error } = await query;
+
+		if (error) return showToast('Failed to fetch logs.', 'error');
+		if (!logs || logs.length === 0) {
+			displayArea.innerHTML = '<div class="text-center p-12 text-gray-500">No logs found for the selected filters.</div>';
+			return showToast('No logs found.', 'info');
+		}
+
+		// --- NEW TABLE STRUCTURE ---
+		const headerHtml = `<header class="academy-header"><img src="https://i.postimg.cc/Dzz5bbVt/Picture1.jpg" alt="Logo"><div><div class="academy-name">The I.L.M.I Academy</div><div class="academy-address">Teaching Log Report</div></div></header>`;
+		
+		let tableRowsHtml = '';
+		// Loop through each weekly log
+		logs.forEach(log => {
+			// Loop through each day of the week
+			daysOfWeek.forEach(day => {
+				const topic = log.weekly_topics[day];
+				if (topic) { // Only create a row if a topic was taught
+					tableRowsHtml += `
+						<tr class="border-b">
+							<td class="px-4 py-3">${new Date(log.week_start_date).toLocaleDateString('en-GB')}</td>
+							<td class="px-4 py-3">${day}</td>
+							<td class="px-4 py-3 font-medium">${log.teacher_name}</td>
+							<td class="px-4 py-3">${log.class_name}</td>
+							<td class="px-4 py-3">${log.subject_name}</td>
+							<td class="px-4 py-3 text-left">${topic}</td>
+						</tr>
+					`;
+				}
+			});
+		});
+
+		// Build the final table HTML
+		const tableHtml = `
+			<table class="full-report-table">
+				<caption>Teacher Log Report</caption>
+				<thead>
+					<tr>
+						<th>Week Starting</th>
+						<th>Day</th>
+						<th>Teacher</th>
+						<th>Class</th>
+						<th>Subject</th>
+						<th class="text-left">Topic Covered</th>
+					</tr>
+				</thead>
+				<tbody>
+					${tableRowsHtml}
+				</tbody>
+			</table>
+		`;
+
+		// Put the header and the new table into the display area
+		displayArea.innerHTML = headerHtml + tableHtml;
+		showToast('✅ Report generated. Creating PDF...', 'success');
+
+		// Wait for the browser to render the new HTML, then call our new PDF function
+		setTimeout(() => {
+			const filename = `Teacher_Logs_${new Date().toLocaleDateString('en-CA')}.pdf`;
+			downloadReportAsPDF('log-print-display-area', filename);
+		}, 100); // 100ms delay to ensure rendering
+	};
 
     /**************************************************************************/
     /* NEW: ORGANIZATION MANAGEMENT LOGIC                                     */
@@ -6093,6 +6314,69 @@ window.addAttendanceToPreview = async () => {
 
 
 </script>
+
+	<div id="page-teacher-log-print" class="page">
+		<main class="flex-grow p-2 md:p-4">
+			<div class="max-w-7xl mx-auto mb-4 p-4 card no-print">
+				<div class="flex justify-between items-center flex-wrap gap-4">
+					<div>
+						<h2 class="text-xl font-bold text-slate-800 text-left">Print Teacher Logs</h2>
+						<p class="text-sm text-slate-600">Select filters to generate a printable report.</p>
+					</div>
+					<div class="flex justify-center gap-4 flex-wrap">
+						<button onclick="navigateTo('page-teacher-dashboard')" class="btn btn-secondary">⬅️ Back</button>
+						<button onclick="generateAndPrintLogs()" class="btn btn-primary">🖨️ Generate & Print</button>
+					</div>
+				</div>
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 border-t pt-4">
+					<div class="input-group !mb-0">
+						<label for="print-log-teacher-select">Teacher</label>
+						<select id="print-log-teacher-select" onchange="populatePrintLogSubjects()"></select>
+					</div>
+					<div class="input-group !mb-0">
+						<label for="print-log-subject-select">Subject (Optional)</label>
+						<select id="print-log-subject-select"></select>
+					</div>
+					 <div class="input-group !mb-0">
+						<label for="print-log-date-filter">Start Date (Optional)</label>
+						<input type="date" id="print-log-date-filter">
+					</div>
+				</div>
+			</div>
+			<div id="log-print-display-area" class="printable-area full-report-container bg-white">
+				<div class="text-center p-12 text-gray-500">Select filters and click "Generate & Print" to see the report here.</div>
+			</div>
+		</main>
+	</div>
+
+	<div id="modal-invite-user" class="page items-center justify-center modal-backdrop hidden z-40">
+		<div class="w-full max-w-lg card p-8 m-4">
+			<h1 class="text-2xl font-bold text-gray-900 mb-6">Create New User Account</h1>
+			<p class="text-sm text-gray-500 -mt-4 mb-6">You are creating this account. You must share the password with the user yourself.</p>
+			<div class="space-y-4">
+				<div class="input-group">
+					<label for="invite-email">User's Email Address</label>
+					<input type="email" id="invite-email" placeholder="e.g., teacher@example.com">
+				</div>
+				<div class="input-group">
+					<label for="invite-password">Create Temporary Password</label>
+					<input type="password" id="invite-password" placeholder="Min. 6 characters. Share this with the user.">
+				</div>
+				<div class="input-group">
+					<label for="invite-role">Assign Role</label>
+					<select id="invite-role">
+						<option value="viewer">Viewer (Read-Only)</option>
+						<option value="editor">Editor (Can add/edit data)</option>
+					</select>
+				</div>
+			</div>
+			<div class="mt-8 flex justify-end gap-4">
+				<button onclick="navigateTo('page-organization-management')" class="btn btn-secondary">Cancel</button>
+				<button onclick="orgMgmt_createNewUser()" class="btn btn-primary">✅ Create Account</button>
+			</div>
+		</div>
+	</div>
+
 </body>
 </html>
 
