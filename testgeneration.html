@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I.L.M.I. Academy - Unified Portal</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tinos:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- UNIFIED & ENHANCED STYLES --- */
+        body { font-family: 'Inter', sans-serif; overflow-x: hidden; background-color: #f3f4f6; }
+        .printable-area { font-family: 'Tinos', serif; }
+        .urdu { font-family: 'Noto Nastaliq Urdu', serif; direction: rtl; }
+
+        /* Smoother Page Transitions from Reference */
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeOut { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.98); } }
+        
+        .page { position: absolute; top: 0; left: 0; width: 100%; min-height: 100vh; display: flex; flex-direction: column; opacity: 0; visibility: hidden; transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out; background-color: #f9fafb; overflow-y: auto; }
+        .page.active { opacity: 1; visibility: visible; animation: fadeIn 0.4s ease-in-out forwards; }
+        .page.exiting { animation: fadeOut 0.4s ease-in-out forwards; }
+
+        /* Redesigned Buttons from Reference */
+        .btn { display: inline-flex; align-items: center; justify-content: center; font-weight: 600; padding: 0.75rem 1.25rem; border-radius: 9999px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1); transition: all 0.2s ease; transform-origin: center; text-align: center; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); }
+        .btn-primary { background-color: #2563eb; color: white; } .btn-primary:hover { background-color: #1d4ed8; }
+        .btn-secondary { background-color: #e5e7eb; color: #1f2937; } .btn-secondary:hover { background-color: #d1d5db; }
+        .btn-success { background-color: #16a34a; color: white; } .btn-success:hover { background-color: #15803d; }
+        .btn-danger { background-color: #dc2626; color: white; } .btn-danger:hover { background-color: #b91c1c; }
+
+        /* Card, UI & Form Styles from Reference */
+        .card { background-color: white; border-radius: 1rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.07), 0 4px 6px -2px rgba(0,0,0,0.05); }
+        .action-card { text-align: left; padding: 1.5rem; border-radius: 1rem; transition: all 0.2s ease; border: 1px solid #e5e7eb; }
+        .action-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); border-color: transparent; }
+        .modal-backdrop { background-color: rgba(17, 24, 39, 0.6); backdrop-filter: blur(4px); }
+        .input-group { margin-bottom: 1rem; }
+        .input-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .input-group input, .input-group textarea, .input-group select { width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 0.375rem; }
+        .question-block { background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 1.5rem; }
+        .question-block h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; }
+        .sub-block { background-color: #fff; border: 1px solid #d1d5db; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem;}
+        
+        /* --- Paper & Print Styles (Corrected) --- */
+        .paper-container { box-sizing: border-box; border: 1px solid #ccc; padding: 40px; background-color: #ffffff; font-family: 'Tinos', serif; font-size: 14px; margin: 0 auto; max-width: 8.5in; }
+        .paper-page { position: relative; overflow: hidden; page-break-after: always; min-height: 11in; }
+        .paper-page:last-child { page-break-after: auto; }
+		.main-header-table { width: 100%; margin-bottom: 20px; border-bottom: 1px solid #ddd; position: relative; z-index: 1; }
+        .logo-cell { width: 100px; padding-right: 20px; vertical-align: middle; }
+        .academy-header-print { text-align: center; vertical-align: middle; }
+        .academy-name { font-size: 28px; font-weight: bold; }
+        .academy-address { font-size: 16px; color: #888; }
+        .details-header-table { width: 100%; border: 2px solid black; border-collapse: collapse; margin-bottom: 30px; font-size: 16px; position: relative; z-index: 1; }
+        .details-header-table td { border: 1px solid #aaa; padding: 8px; }
+        .section-title { font-weight: bold; font-size: 22px; text-align: center; margin-top: 30px; margin-bottom: 15px; text-decoration: underline; }
+        .question-title { font-weight: bold; font-size: 16px; margin-top: 20px; margin-bottom: 10px; position: relative; z-index: 1; overflow: hidden; }
+        .marks { float: right; }
+        .urdu .marks { float: left; }
+        .question-content { margin-top: 5px; line-height: 1.8; clear: both; }
+        .question-item { margin-bottom: 8px; }
+        .long-question-part { margin-left: 20px; margin-bottom: 5px; }
+        .urdu .long-question-part { margin-right: 20px; margin-left: 0; }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 0.5in; /* Default margin for printing */
+            }
+            body { background-color: #fff !important; padding: 0; margin: 0; font-size: 12pt; }
+            .no-print { display: none !important; }
+            body.is-printing > *:not(#printable-paper-area) { display: none !important; }
+            #printable-paper-area { position: static !important; margin: 0 !important; border: none !important; box-shadow: none !important; padding: 0 !important; }
+            .paper-container { border: none; padding: 0 !important; box-shadow: none; margin: 0; max-width: 100%; }
+            .paper-page { min-height: auto; page-break-inside: avoid; }
+            body.printing-blank-page > *:not(#blank-page-for-printing-wrapper) { display: none !important; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Test Generator Pages -->
+    <div id="page-testgen-menu" class="page items-center justify-center p-4">
+        <main class="w-full max-w-2xl mx-auto">
+            <div class="card p-8 md:p-12 text-center">
+                <img src="https://i.postimg.cc/Dzz5bbVt/Picture1.jpg" alt="Logo" class="w-20 h-20 mx-auto rounded-full object-cover shadow-md mb-4" onerror="this.onerror=null;this.src='https://placehold.co/80x80';">
+
+                <!-- ADDED HOME BUTTON -->
+                <div class="text-center mb-6">
+                    <a href="https://theilmiscienceacademy.github.io/theilmiscienceacademy/"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="btn btn-secondary py-2 px-4 inline-block">
+                        🏠 Home
+                    </a>
+                </div>
+                <!-- END ADDED HOME BUTTON -->
+
+                <h1 class="text-3xl font-bold text-gray-800 mb-8">Choose Generation Method</h1>
+                <div class="mb-8 border-b pb-8 space-y-4">
+                    <button onclick="navigateTo('page-testgen-advanced')" class="btn btn-primary text-lg py-4 w-full md:w-3/4 mx-auto">⚙️ Advanced Paper Generation</button>
+                    <button onclick="downloadBlankPage()" class="btn btn-secondary text-lg py-4 w-full md:w-3/4 mx-auto">📄 Download Blank Branded Page</button>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-700 mb-6">Or, Use a Template:</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button onclick="selectClass('9', 'text-blue-600')" class="btn btn-secondary text-xl py-8">🎓 9th</button>
+                    <button onclick="selectClass('10', 'text-green-600')" class="btn btn-secondary text-xl py-8">🎓 10th</button>
+                    <button onclick="selectClass('11', 'text-purple-600')" class="btn btn-secondary text-xl py-8">🎓 11th</button>
+                    <button onclick="selectClass('12', 'text-orange-600')" class="btn btn-secondary text-xl py-8">🎓 12th</button>
+                </div>
+                <!-- "Back to Portal" button was removed -->
+            </div>
+        </main>
+    </div>
+
+    <div id="page-testgen-subjects" class="page items-center justify-center p-4">
+        <main class="w-full max-w-2xl mx-auto">
+            <div class="card p-8 md:p-12 text-center">
+                <img src="https://i.postimg.cc/Dzz5bbVt/Picture1.jpg" alt="Logo" class="w-20 h-20 mx-auto rounded-full object-cover shadow-md mb-4" onerror="this.onerror=null;this.src='https://placehold.co/80x80';">
+                <h1 id="subject-heading" class="text-3xl font-bold mb-8">Subjects</h1>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <button onclick="selectSubject('Biology')" class="btn btn-secondary text-lg py-6">🧬 Biology</button>
+                    <button onclick="selectSubject('Chemistry')" class="btn btn-secondary text-lg py-6">⚗️ Chemistry</button>
+                    <button onclick="selectSubject('Physics')" class="btn btn-secondary text-lg py-6">🔭 Physics</button>
+                    <button onclick="selectSubject('English')" class="btn btn-secondary text-lg py-6">📘 English</button>
+                    <button onclick="selectSubject('Urdu')" class="btn btn-secondary text-lg py-6">✍ Urdu</button>
+                </div>
+                <button onclick="navigateBack()" class="btn btn-secondary mt-12 w-1/2 mx-auto">⬅️ Back</button>
+            </div>
+        </main>
+    </div>
+
+    <div id="page-testgen-papertype" class="page items-center justify-center p-4">
+        <main class="w-full max-w-xl mx-auto">
+            <div class="card p-8 md:p-12 text-center">
+                <img src="https://i.postimg.cc/Dzz5bbVt/Picture1.jpg" alt="Logo" class="w-20 h-20 mx-auto rounded-full object-cover shadow-md mb-4" onerror="this.onerror=null;this.src='https://placehold.co/80x80';">
+                <h1 id="paper-type-heading" class="text-3xl font-bold mb-8">Paper Type</h1>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <button onclick="selectPaperType('Full_Half_Book')" class="btn btn-primary text-lg py-6">📖 Full/Half Book</button>
+                    <button onclick="selectPaperType('Chapter_Wise')" class="btn btn-primary text-lg py-6">📂 Chapter Wise</button>
+                </div>
+                <button onclick="navigateBack()" class="btn btn-secondary mt-12 w-1/2 mx-auto">⬅️ Back</button>
+            </div>
+        </main>
+    </div>
+
+    <div id="paper-pages-container"></div>
+
+    <div id="page-testgen-advanced" class="page p-4 md:p-8">
+        <main class="w-full max-w-4xl mx-auto">
+            <div id="advanced-wizard-header" class="flex items-center justify-between no-print mb-6">
+                 <button onclick="navigateTo('page-testgen-menu')" class="btn btn-secondary">← Back to Menu</button>
+                 <div class="flex items-center gap-3">
+                     <img src="https://i.postimg.cc/Dzz5bbVt/Picture1.jpg" alt="Logo" class="w-12 h-12 rounded-full object-cover">
+                     <h1 class="text-2xl font-bold text-center text-gray-800">Advanced Paper Generator</h1>
+                 </div>
+                 <div style="width: 150px;"></div> 
+            </div>
+            <div id="advanced-generator-container" class="card p-6 md:p-8">
+                <div id="advanced-step-1" class="wizard-step">
+                    <h3 class="text-xl font-bold text-gray-800 mb-6">Step 1: Basic Paper Info</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="input-group"><label for="advanced_class">Class</label><input type="text" id="advanced_class" placeholder="e.g., 9th"></div>
+                        <div class="input-group"><label for="advanced_term">Term</label><input type="text" id="advanced_term" placeholder="e.g., Mid-Term Exam"></div>
+                        <div class="input-group"><label for="advanced_subject">Subject</label><input type="text" id="advanced_subject" placeholder="e.g., Physics"></div>
+                    </div>
+                    <hr class="my-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                        <div class="input-group"><label for="advanced_mcq_count">Number of MCQs</label><input type="number" id="advanced_mcq_count" placeholder="e.g., 12"></div>
+                        <div class="input-group"><label for="advanced_sq_sections">Number of SQ Sections</label><input type="number" id="advanced_sq_sections" placeholder="e.g., 3"></div>
+                        <div class="input-group"><label for="advanced_sq_per_section">Questions per SQ Section</label><input type="number" id="advanced_sq_per_section" placeholder="e.g., 8"></div>
+                        <div class="input-group"><label for="advanced_sq_attempt">SQs to Attempt per Section</label><input type="number" id="advanced_sq_attempt" placeholder="e.g., 5"></div>
+                        <div class="input-group"><label for="advanced_lq_count">Number of LQs</label><input type="number" id="advanced_lq_count" placeholder="e.g., 3"></div>
+                        <div class="input-group"><label for="advanced_lq_attempt">LQs to Attempt</label><input type="number" id="advanced_lq_attempt" placeholder="e.g., 2"></div>
+                        <div class="flex items-center gap-3 bg-gray-50 p-3 rounded-lg border h-full"><input type="checkbox" id="advanced_lq_parts" class="h-5 w-5 rounded"><label for="advanced_lq_parts" class="font-medium text-gray-700 m-0">Divide Each LQ into A/B Parts</label></div>
+                    </div>
+                    <div class="mt-8 flex justify-end">
+                        <button onclick="buildAndGoToMcqStep()" class="btn btn-primary">Proceed to MCQs Entry →</button>
+                    </div>
+                </div>
+                <div id="advanced-step-2" class="wizard-step">
+                    <h3 class="text-xl font-bold text-gray-800 mb-6">Step 2: MCQs Entry</h3>
+                    <div id="advanced-mcq-container" class="space-y-4 max-h-[60vh] overflow-y-auto pr-2"></div>
+                    <div class="mt-8 flex justify-between">
+                        <button onclick="showAdvancedStep(1)" class="btn btn-secondary">← Back</button>
+                        <div>
+                            <button onclick="addMcqInput()" class="btn btn-secondary mr-4">➕ Add More MCQ</button>
+                            <button onclick="buildAndGoToSqStep()" class="btn btn-primary">Next →</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="advanced-step-3" class="wizard-step">
+                    <h3 class="text-xl font-bold text-gray-800 mb-6">Step 3: Short Questions (SQs)</h3>
+                    <div id="advanced-sq-container" class="space-y-6 max-h-[60vh] overflow-y-auto pr-2"></div>
+                    <div class="mt-8 flex justify-between">
+                        <button onclick="showAdvancedStep(2)" class="btn btn-secondary">← Back</button>
+                          <div>
+                            <button onclick="addSqSection()" class="btn btn-secondary mr-4">➕ Add Section</button>
+                            <button onclick="buildAndGoToLqStep()" class="btn btn-primary">Next →</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="advanced-step-4" class="wizard-step">
+                    <h3 class="text-xl font-bold text-gray-800 mb-6">Step 4: Long Questions (LQs)</h3>
+                    <div id="advanced-lq-container" class="space-y-4 max-h-[60vh] overflow-y-auto pr-2"></div>
+                    <div class="mt-8 flex justify-between">
+                        <button onclick="showAdvancedStep(3)" class="btn btn-secondary">← Back</button>
+                        <button onclick="generateAdvancedPaper()" class="btn btn-success">📄 Generate Paper</button>
+                    </div>
+                </div>
+            </div>
+            <div id="advanced-paper-preview-container" class="hidden">
+                 <div class="max-w-4xl mx-auto my-8 p-6 bg-gray-100 border-2 border-dashed border-gray-400 rounded-xl text-center no-print">
+                     <h2 class="text-2xl font-bold text-slate-800">🎉 Generation Complete!</h2>
+                     <p class="text-slate-600 mb-6">Your test paper is ready. You can now print, edit, or download.</p>
+                     <div class="flex justify-center gap-4 flex-wrap">
+                         <button onclick="goBackToAdvancedForm()" class="btn btn-secondary">✏️ Edit</button>
+                         <button onclick="printGeneratedPaper(this)" class="btn btn-success">🖨️ Print / Download PDF</button>
+                     </div>
+                 </div>
+                 <div id="advanced-final-paper-display"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Generic Message Box -->
+    <div id="app-message-box" class="page items-center justify-center modal-backdrop hidden z-50">
+        <div class="card max-w-sm w-full p-8 text-center">
+            <h3 id="app-message-title" class="text-xl font-bold text-gray-800 mb-2">Notice</h3>
+            <p id="app-message-content" class="text-gray-600 mb-6">Message content goes here.</p>
+            <button id="app-message-close-btn" class="btn btn-secondary w-1/2 mx-auto">Close</button>
+        </div>
+    </div>
+    
+    <!-- Hidden template for the wizard shell -->
+    <div id="templates" class="hidden">
+        <div id="wizard-shell-template">
+            <div id="generator-container" class="card max-w-5xl mx-auto p-6 md:p-8">
+                <form id="paper-form" onsubmit="return false;"></form>
+            </div>
+            <div id="paper-preview-container" class="hidden">
+                <div id="preview-controls" class="max-w-4xl mx-auto my-8 p-6 bg-gray-100 border-2 border-dashed border-gray-400 rounded-xl text-center no-print">
+                    <h2 class="text-2xl font-bold text-slate-800">🎉 Generation Complete!</h2>
+                    <p class="text-slate-600 mb-6">Your test paper is ready. You can now print, edit the text directly below, or go back to the form.</p>
+                    <div class="flex justify-center gap-4 flex-wrap">
+                        <button onclick="goBackToEdit(this)" class="btn btn-secondary">✏️ Go Back & Edit</button>
+                        <button onclick="printGeneratedPaper(this)" class="btn btn-success">🖨️ Print / Save as PDF</button>
+                    </div>
+                </div>
+                <div id="final-paper-display"></div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // --- GLOBAL APP STATE & NAVIGATION ---
+    // MODIFIED: Start on the test generator menu
+    let currentPageId = 'page-testgen-menu';
+    let navigationHistory = ['page-testgen-menu'];
+    let selectedClassInfo = { name: '', colorClass: '' };
+    let selectedSubjectInfo = '';
+    const createdPages = new Set();
+    let currentWizardStep = 1;
+    let totalWizardSteps = 0;
+    let currentAdvancedStep = 1;
+
+    function showAppMessage(title, content) {
+        document.getElementById('app-message-title').textContent = title;
+        document.getElementById('app-message-content').textContent = content;
+        const messageBox = document.getElementById('app-message-box');
+        messageBox.classList.remove('hidden');
+        messageBox.classList.add('active');
+        document.getElementById('app-message-close-btn').onclick = () => {
+            messageBox.classList.remove('active');
+            messageBox.classList.add('hidden');
+        };
+    }
+
+    function navigateTo(pageId) {
+        if (pageId === 'page-testgen-advanced') {
+            showAdvancedStep(1); 
+        }
+        const currentPageElement = document.getElementById(currentPageId);
+        const nextPageElement = document.getElementById(pageId);
+        if (!currentPageElement || !nextPageElement) return;
+
+        if (navigationHistory[navigationHistory.length - 1] !== pageId) {
+            navigationHistory.push(pageId);
+        }
+        currentPageElement.classList.add('exiting');
+        setTimeout(() => {
+            currentPageElement.classList.remove('active', 'exiting');
+            nextPageElement.classList.add('active');
+            currentPageId = pageId;
+            window.scrollTo(0, 0);
+        }, 400); 
+    }
+
+    function navigateBack() {
+        if (navigationHistory.length <= 1) return;
+        const currentPageElement = document.getElementById(currentPageId);
+        navigationHistory.pop();
+        const previousPageId = navigationHistory[navigationHistory.length - 1];
+        const previousPageElement = document.getElementById(previousPageId);
+
+        if (currentPageElement && previousPageElement) {
+            currentPageElement.classList.add('exiting');
+            setTimeout(() => {
+                currentPageElement.classList.remove('active', 'exiting');
+                if (currentPageElement.id.startsWith('wizard-page-')) {
+                    currentPageElement.remove();
+                    createdPages.delete(currentPageElement.id);
+                }
+                previousPageElement.classList.add('active');
+                currentPageId = previousPageId;
+            }, 400);
+        }
+    }
+    
+    function selectClass(className, colorClass) {
+        selectedClassInfo = { name: className, colorClass: colorClass };
+        document.getElementById('subject-heading').textContent = `Class ${className}th Subjects`;
+        document.getElementById('subject-heading').className = `text-3xl font-bold mb-8 ${colorClass}`;
+        navigateTo('page-testgen-subjects');
+    }
+
+    function selectSubject(subjectName) {
+        selectedSubjectInfo = subjectName;
+        document.getElementById('paper-type-heading').textContent = `${selectedSubjectInfo} Paper`;
+        document.getElementById('paper-type-heading').className = `text-3xl font-bold mb-8 ${selectedClassInfo.colorClass}`;
+        navigateTo('page-testgen-papertype');
+    }
+    
+    function selectPaperType(paperType) {
+        const pageId = `wizard-page-${selectedClassInfo.name}-${selectedSubjectInfo}-${paperType}`.toLowerCase();
+        if (!createdPages.has(pageId)) {
+            createPaperPage(pageId, selectedClassInfo.name, selectedSubjectInfo, paperType);
+        }
+        if (document.getElementById(pageId)) {
+            navigateTo(pageId);
+        }
+    }
+
+    function downloadBlankPage() {
+        const blankPageHtml = `
+        <div class="paper-container" id="blank-page-for-printing">
+            <div class="paper-page">
+                <table class="main-header-table">
+                    <tr>
+                        <td class="logo-cell"><img src="https://i.postimg.cc/Dzz5bbVt/Picture1.jpg" alt="Logo" style="width: 80px;"></td>
+                        <td class="academy-header-print">
+                            <div class="academy-name">The I.L.M.I Academy Science & Commerce</div>
+                            <div class="academy-address">Kahna Nau, Lahore</div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>`;
+        
+        const tempContainer = document.createElement('div');
+        tempContainer.id = 'blank-page-for-printing-wrapper';
+        tempContainer.innerHTML = blankPageHtml;
+        document.body.appendChild(tempContainer);
+        document.body.classList.add('printing-blank-page');
+        window.print();
+        document.body.classList.remove('printing-blank-page');
+        document.body.removeChild(tempContainer);
+    }
+
+    const paperStructures = {
+        'Full_Half_Book': {
+            '9_English': [
+                { type: 'header', q_num: 0, title: 'Paper Header', totalMarks: 75, totalTime: '2.5 Hours' },
+                { type: 'mcq', q_num: 1, title: 'MCQs', count: 19, marks: 19 },
+                { type: 'short_questions', q_num: 2, title: 'Short Questions', provide: 8, attempt: 5, marks: 10 },
+                { type: 'para_translation_english', q_num: 3, title: 'Paragraph Translation', provide: 3, attempt: 2, marks: 8 },
+                { type: 'summary_paraphrase', q_num: 4, title: 'Poem Summary / Paraphrasing', marks: 5 },
+                { type: 'words_in_sentences', q_num: 5, title: 'Words in Sentences', provide: 8, attempt: 5, marks: 5 },
+                { type: 'letter_story_dialogue', q_num: 6, title: 'Letter / Story / Dialogue', marks: 8 },
+                { type: 'comprehension', q_num: 7, title: 'Reading Comprehension', q_count: 5, marks: 10 },
+                { type: 'urdu_sentences_translation', q_num: 8, title: 'Sentence Translation (Urdu to English)', provide: 8, attempt: 5, marks: 5 },
+                { type: 'voice_change', q_num: 9, title: 'Change of Voice', provide: 5, attempt: 5, marks: 5 }
+            ],
+            '10_English': [
+                { type: 'header', q_num: 0, title: 'Paper Header', totalMarks: 75, totalTime: '2.5 Hours' },
+                { type: 'mcq', q_num: 1, title: 'MCQs', count: 19, marks: 19 },
+                { type: 'short_questions', q_num: 2, title: 'Short Questions', provide: 8, attempt: 5, marks: 10 },
+                { type: 'para_translation_urdu', q_num: 3, title: 'Paragraph Translation (English to Urdu)', marks: 8 },
+                { type: 'summary_paraphrase', q_num: 4, title: 'Poem Summary / Paraphrasing', marks: 5 },
+                { type: 'essay_paragraph', q_num: 5, title: 'Essay / Paragraph', provide: 3, attempt: 1, marks: 15 },
+                { type: 'direct_indirect', q_num: 6, title: 'Direct & Indirect Speech', provide: 8, attempt: 5, marks: 5 },
+                { type: 'pair_of_words', q_num: 7, title: 'Pair of Words', provide: 8, attempt: 5, marks: 5 },
+                { type: 'urdu_para_translation', q_num: 8, title: 'Paragraph Translation (Urdu to English)', marks: 8 }
+            ],
+            '11_English': [
+                { type: 'header', q_num: 0, title: 'Paper Header', totalMarks: 100, totalTime: '3 Hours' },
+                { type: 'mcq', q_num: 1, title: 'MCQs', count: 20, marks: 20 },
+                { type: 'short_questions', q_num: 2, title: 'Short Questions (Book-I)', provide: 9, attempt: 6, marks: 12 },
+                { type: 'short_questions', q_num: 3, title: 'Short Questions (Book-III Plays)', provide: 8, attempt: 5, marks: 10 },
+                { type: 'short_questions', q_num: 4, title: 'Short Questions (Book-III Poems)', provide: 6, attempt: 4, marks: 8 },
+                { type: 'letter_application', q_num: 5, title: 'Letter / Application Writing', marks: 10 },
+                { type: 'story_moral', q_num: 6, title: 'Story Writing', provide: 2, attempt: 1, marks: 10 },
+                { type: 'stanza_context', q_num: 7, title: 'Stanza Explanation, Punctuation & Pair of Words', stanza_marks: 5, punc_marks: 5, pair_marks: 5 },
+                { type: 'urdu_para_translation', q_num: 8, title: 'Translation (Urdu to English)', marks: 15 }
+            ],
+            '12_English': [
+                { type: 'header', q_num: 0, title: 'Paper Header', totalMarks: 100, totalTime: '3 Hours' },
+                { type: 'mcq', q_num: 1, title: 'MCQs', count: 20, marks: 20 },
+                { type: 'short_questions', q_num: 2, title: 'Short Questions (Prose)', provide: 9, attempt: 6, marks: 12 },
+                { type: 'short_questions', q_num: 3, title: 'Short Questions (Heroes)', provide: 8, attempt: 6, marks: 12 },
+                { type: 'short_questions', q_num: 4, title: 'Short Questions (Novel)', provide: 12, attempt: 8, marks: 16 },
+                { type: 'essay', q_num: 5, title: 'Essay Writing', provide: 4, attempt: 1, marks: 15 },
+                { type: 'idioms_phrasal_verbs', q_num: 6, title: 'Idioms / Phrasal Verbs', provide: 8, attempt: 5, marks: 10 },
+                { type: 'urdu_para_translation', q_num: 7, title: 'Translation (Urdu to English)', marks: 15 }
+            ],
+            '9_Urdu': [
+                { type: 'header', q_num: 0, title: 'پیپر ہیڈر', lang: 'ur', totalMarks: 75, totalTime: '2.5 گھنٹے' },
+                { type: 'mcq', q_num: 1, title: 'معروضی سوالات', lang: 'ur', count: 15, marks: 15 },
+                { type: 'poetry_explanation', q_num: 2, title: 'اشعار کی وضاحت', lang: 'ur', nazm_provide: 4, nazm_attempt: 3, nazm_marks: 6, ghazal_provide: 3, ghazal_attempt: 2, ghazal_marks: 4 },
+                { type: 'prose_explanation', q_num: 3, title: 'نثری اقتباسات کی تشریح', lang: 'ur', provide: 2, attempt: 1, marks: 10 },
+                { type: 'short_questions', q_num: 4, title: 'مختصر سوالات', lang: 'ur', provide: 8, attempt: 5, marks: 10 },
+                { type: 'lesson_summary', q_num: 5, title: 'سبق کا خلاصہ', lang: 'ur', provide: 2, attempt: 1, marks: 5 },
+                { type: 'poem_summary_idea', q_num: 6, title: 'نظم کا خلاصہ / مرکزی خیال', lang: 'ur', marks: 5 },
+                { type: 'letter_application', q_num: 7, title: 'خط / درخواست', lang: 'ur', marks: 10 },
+                { type: 'story_dialogue', q_num: 8, title: 'کہانی / مکالمہ', lang: 'ur', marks: 5 },
+                { type: 'sentence_correction_idioms', q_num: 9, title: 'جملوں کی درستی / محاورات', lang: 'ur', provide: 5, marks: 5 }
+            ],
+            '10_Urdu': [
+                { type: 'header', q_num: 0, title: 'پیپر ہیڈر', lang: 'ur', totalMarks: 75, totalTime: '2.5 گھنٹے' },
+                { type: 'mcq', q_num: 1, title: 'معروضی سوالات', lang: 'ur', count: 15, marks: 15 },
+                { type: 'poetry_explanation', q_num: 2, title: 'اشعار کی وضاحت', lang: 'ur', nazm_provide: 4, nazm_attempt: 3, nazm_marks: 6, ghazal_provide: 2, ghazal_attempt: 2, ghazal_marks: 4 },
+                { type: 'prose_explanation_context', q_num: 3, title: 'اقتباس کی تشریح', lang: 'ur', provide: 2, attempt: 1, marks: 10 },
+                { type: 'short_questions', q_num: 4, title: 'مختصر سوالات', lang: 'ur', provide: 8, attempt: 5, marks: 10 },
+                { type: 'lesson_summary', q_num: 5, title: 'سبق کا خلاصہ', lang: 'ur', provide: 2, attempt: 1, marks: 5 },
+                { type: 'essay', q_num: 6, title: 'مضمون نویسی', lang: 'ur', provide: 3, attempt: 1, marks: 15 },
+                { type: 'comprehension', q_num: 7, title: 'تفہیم عبارت', lang: 'ur', q_count: 5, marks: 10 }
+            ],
+            '11_Urdu': [
+                { type: 'header', q_num: 0, title: 'پیپر ہیڈر', lang: 'ur', totalMarks: 100, totalTime: '3 گھنٹے' },
+                { type: 'mcq', q_num: 1, title: 'معروضی سوالات', lang: 'ur', count: 20, marks: 20 },
+                { type: 'poetry_explanation_simple', q_num: 2, title: 'اشعار کی تشریح', lang: 'ur', nazm_marks: 10, ghazal_marks: 10 },
+                { type: 'prose_explanation_context', q_num: 3, title: 'سیاق و سباق کے حوالے سے تشریح', lang: 'ur', provide: 2, attempt: 1, marks: 15 },
+                { type: 'lesson_summary', q_num: 4, title: 'سبق کا خلاصہ', lang: 'ur', provide: 2, attempt: 1, marks: 10 },
+                { type: 'poem_summary_idea', q_num: 5, title: 'نظم کا خلاصہ', lang: 'ur', marks: 5 },
+                { type: 'dialogue_report', q_num: 6, title: 'مکالمہ / روداد', lang: 'ur', provide: 2, attempt: 1, marks: 10 },
+                { type: 'application_request', q_num: 7, title: 'درخواست نویسی', lang: 'ur', marks: 10 },
+                { type: 'precis_writing', q_num: 8, title: 'تلخیص نویسی', lang: 'ur', marks: 10 },
+            ],
+            '12_Urdu': [
+                { type: 'header', q_num: 0, title: 'پیپر ہیڈر', lang: 'ur', totalMarks: 100, totalTime: '3 گھنٹے' },
+                { type: 'mcq', q_num: 1, title: 'معروضی سوالات', lang: 'ur', count: 20, marks: 20 },
+                { type: 'poetry_explanation_simple', q_num: 2, title: 'اشعار کی تشریح', lang: 'ur', nazm_marks: 10, ghazal_marks: 10 },
+                { type: 'prose_explanation_context', q_num: 3, title: 'اقتباس کی تشریح', lang: 'ur', provide: 2, attempt: 1, marks: 15 },
+                { type: 'lesson_summary', q_num: 4, title: 'سبق کا خلاصہ', lang: 'ur', provide: 2, attempt: 1, marks: 10 },
+                { type: 'poem_summary_idea', q_num: 5, title: 'نظم کا خلاصہ', lang: 'ur', marks: 5 },
+                { type: 'essay', q_num: 6, title: 'مضمون نویسی', lang: 'ur', provide: 3, attempt: 1, marks: 20 },
+                { type: 'letter_application', q_num: 7, title: 'خط', lang: 'ur', marks: 10 },
+            ],
+            'Science': [ // For 9th and 10th
+                { type: 'header', q_num: 0, title: 'Paper Header', totalMarks: 60, totalTime: '2 Hours' },
+                { type: 'mcq', q_num: 1, title: 'MCQs', count: 12, marks: 12 },
+                { type: 'short_questions_set', q_num: 2, title: 'Short Questions (Set 1)', provide: 8, attempt: 5, marks: 10 },
+                { type: 'short_questions_set', q_num: 3, title: 'Short Questions (Set 2)', provide: 8, attempt: 5, marks: 10 },
+                { type: 'short_questions_set', q_num: 4, title: 'Short Questions (Set 3)', provide: 8, attempt: 5, marks: 10 },
+                { type: 'long_questions', q_num: '5,6,7', title: 'Explanatory Answers', provide: 3, attempt: 2, marks: 18 }
+            ],
+            'Science_Intermediate': [ // For 11th and 12th
+                { type: 'header', q_num: 0, title: 'Paper Header', totalMarks: 85, totalTime: '3 Hours' },
+                { type: 'mcq', q_num: 1, title: 'MCQs', count: 17, marks: 17 },
+                { type: 'short_questions_set', q_num: 2, title: 'Short Questions (Set 1)', provide: 12, attempt: 8, marks: 16 },
+                { type: 'short_questions_set', q_num: 3, title: 'Short Questions (Set 2)', provide: 12, attempt: 8, marks: 16 },
+                { type: 'short_questions_set', q_num: 4, title: 'Short Questions (Set 3)', provide: 9, attempt: 6, marks: 12 },
+                { type: 'long_questions', q_num: '5,6,7,8,9', title: 'Explanatory Answers', provide: 5, attempt: 3, marks: 24 }
+            ]
+        },
+        'Chapter_Wise': {
+            'default': [
+                { type: 'header', q_num: 0, title: 'Paper Header', totalMarks: 30, totalTime: '1 Hour' },
+                { type: 'mcq', q_num: 1, title: 'MCQs', count: 5, marks: 5 },
+                { type: 'short_questions_set', q_num: 2, title: 'Short Questions', provide: 8, attempt: 5, marks: 10 },
+                { type: 'long_questions_chapterwise', q_num: 3, title: 'Long Questions', attempt: 1, marks: 15 }
+            ]
+        }
+    };
+
+    function createInput(id, label, value = '', type = 'text', isUrdu = false) {
+        return `<div class="input-group"><label for="${id}" class="${isUrdu ? 'urdu' : ''}">${label}:</label><input type="${type}" id="${id}" value="${value}" class="${isUrdu ? 'urdu' : ''}"></div>`;
+    }
+
+    function createTextarea(id, label, isUrdu = false, rows = 2) {
+        return `<div class="input-group"><label for="${id}" class="${isUrdu ? 'urdu' : ''}">${label}:</label><textarea id="${id}" rows="${rows}" class="${isUrdu ? 'urdu' : ''}"></textarea></div>`;
+    }
+    
+    function createQuestionBlock(config) {
+        let content = '';
+        const isUrdu = config.lang === 'ur';
+        const urduClass = isUrdu ? 'urdu' : '';
+        const id_prefix = `${config.type}_${String(config.q_num).replace(/,/g, '_')}`;
+        const q_title = isUrdu ? `سوال نمبر ${config.q_num}` : (config.q_num > 0 ? `Q-${config.q_num}` : 'Step');
+
+        switch (config.type) {
+            case 'header':
+                content += `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    ${createInput('header_total_marks', isUrdu ? 'کل نمبر' : 'Total Marks', config.totalMarks, 'text', isUrdu)}
+                    ${createInput('header_total_time', isUrdu ? 'کل وقت' : 'Total Time', config.totalTime, 'text', isUrdu)}
+                </div>`;
+                break;
+            
+            case 'mcq':
+            case 'short_questions':
+            case 'short_questions_set':
+            case 'words_in_sentences':
+            case 'direct_indirect':
+            case 'pair_of_words':
+            case 'voice_change':
+            case 'essay':
+            case 'essay_paragraph':
+            case 'idioms_phrasal_verbs':
+            case 'urdu_sentences_translation':
+            case 'lesson_summary':
+            case 'prose_explanation':
+            case 'prose_explanation_context':
+            case 'dialogue_report':
+            case 'story_moral':
+            case 'sentence_correction_idioms':
+                const provideLabel = (config.type.match(/mcq|essay|lesson|prose|dialogue|story/)) ? (isUrdu ? 'کل عنوانات' : 'Total Topics/Items') : (isUrdu ? 'کل سوالات' : 'Total to Provide');
+                const attemptLabel = isUrdu ? 'کتنے حل کرنے ہیں' : 'To Attempt';
+                content += `<div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    ${createInput(`${id_prefix}_provide`, provideLabel, config.provide || config.count, 'number', isUrdu)}
+                    ${config.attempt ? createInput(`${id_prefix}_attempt`, attemptLabel, config.attempt, 'number', isUrdu) : '<div></div>'}
+                    ${createInput(`${id_prefix}_marks`, isUrdu ? 'کل نمبر' : 'Total Marks', config.marks, 'text', isUrdu)}
+                </div><div id="${id_prefix}_inputs"></div>`;
+                break;
+            
+            case 'long_questions':
+                content += `<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    ${createInput(`${id_prefix}_attempt`, isUrdu ? 'کتنے حل کرنے ہیں' : 'To Attempt', config.attempt, 'number', isUrdu)}
+                    ${createInput(`${id_prefix}_marks`, isUrdu ? 'کل نمبر' : 'Total Marks', config.marks, 'text', isUrdu)}
+                </div>`;
+                const q_nums = String(config.q_num).split(',');
+                for (const qNum of q_nums) {
+                    content += `<div class="sub-block">
+                        <p class="font-bold mb-2 ${urduClass}">${isUrdu ? `سوال #${qNum}` : `Question #${qNum}`}</p>
+                        ${createTextarea(`${id_prefix}_q${qNum}_a`, isUrdu ? 'حصہ (الف)' : 'Part (A)', isUrdu)}
+                        ${createTextarea(`${id_prefix}_q${qNum}_b`, isUrdu ? 'حصہ (ب)' : 'Part (B)', isUrdu)}
+                    </div>`;
+                }
+                break;
+
+            case 'long_questions_chapterwise':
+                content += `<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    ${createInput(`${id_prefix}_attempt`, 'To Attempt', config.attempt, 'number')}
+                    ${createInput(`${id_prefix}_marks`, 'Total Marks', config.marks, 'text')}
+                </div>`;
+                content += `<div class="input-group mt-4">
+                    <label for="chapter_lq_count">How many long questions to add?</label>
+                    <div class="flex gap-2">
+                       <input type="number" id="chapter_lq_count" value="2" class="!w-1/4">
+                       <button type="button" onclick="generateChapterLqFields()" class="btn btn-secondary !rounded-lg !py-2">Generate Fields</button>
+                    </div>
+                </div>`;
+                content += `<div id="chapter_lq_fields_container" class="space-y-4 mt-4"></div>`;
+                break;
+            
+            case 'poetry_explanation':
+                content += `<div class="sub-block">
+                    <h4 class="font-semibold ${urduClass}">حصہ نظم</h4>
+                    ${createInput(`${id_prefix}_nazm_provide`, 'کل اشعار؟', config.nazm_provide, 'number', isUrdu)}
+                    ${createInput(`${id_prefix}_nazm_attempt`, 'کتنے حل کرنے ہیں؟', config.nazm_attempt, 'number', isUrdu)}
+                    ${createInput(`${id_prefix}_nazm_marks`, 'کل نمبر', config.nazm_marks, 'text', isUrdu)}
+                    <div id="${id_prefix}_nazm_inputs"></div>
+                </div>
+                <div class="sub-block mt-4">
+                    <h4 class="font-semibold ${urduClass}">حصہ غزل</h4>
+                    ${createInput(`${id_prefix}_ghazal_provide`, 'کل اشعار؟', config.ghazal_provide, 'number', isUrdu)}
+                    ${createInput(`${id_prefix}_ghazal_attempt`, 'کتنے حل کرنے ہیں؟', config.ghazal_attempt, 'number', isUrdu)}
+                    ${createInput(`${id_prefix}_ghazal_marks`, 'کل نمبر', config.ghazal_marks, 'text', isUrdu)}
+                    <div id="${id_prefix}_ghazal_inputs"></div>
+                </div>`;
+                break;
+
+            case 'poetry_explanation_simple':
+                content += createTextarea(`${id_prefix}_nazm`, 'نظم کے اشعار', isUrdu, 4);
+                content += createInput(`${id_prefix}_nazm_marks`, 'نظم کے نمبر', config.nazm_marks, 'text', isUrdu);
+                content += `<hr class="my-4">`;
+                content += createTextarea(`${id_prefix}_ghazal`, 'غزل کے اشعار', isUrdu, 4);
+                content += createInput(`${id_prefix}_ghazal_marks`, 'غزل کے نمبر', config.ghazal_marks, 'text', isUrdu);
+                break;
+            
+            case 'letter_application':
+            case 'application_request':
+                content += createInput(`${id_prefix}_marks`, isUrdu ? 'کل نمبر' : 'Total Marks', config.marks, 'text', isUrdu);
+                content += createInput(`${id_prefix}_topic1`, isUrdu ? 'موضوع ۱' : 'Topic 1 (e.g. Letter)', '', 'text', isUrdu);
+                content += `<p class="text-center font-bold my-2">${isUrdu ? 'یا' : 'OR'}</p>`;
+                content += createInput(`${id_prefix}_topic2`, isUrdu ? 'موضوع ۲' : 'Topic 2 (e.g. Application)', '', 'text', isUrdu);
+                break;
+            
+            case 'story_dialogue':
+                content += createInput(`${id_prefix}_marks`, isUrdu ? 'کل نمبر' : 'Total Marks', config.marks, 'text', isUrdu);
+                content += createInput(`${id_prefix}_topic1`, 'کہانی کا عنوان', '', 'text', isUrdu);
+                content += `<p class="text-center font-bold my-2">یا</p>`;
+                content += createInput(`${id_prefix}_topic2`, 'مکالمہ کا موضوع', '', 'text', isUrdu);
+                break;
+            
+            case 'letter_story_dialogue':
+                content += createInput(`${id_prefix}_marks`, 'Total Marks', config.marks, 'text', false);
+                content += createInput(`${id_prefix}_letter`, 'Letter Topic', '', 'text', false);
+                content += createInput(`${id_prefix}_story`, 'Story Topic', '', 'text', false);
+                content += createInput(`${id_prefix}_dialogue`, 'Dialogue Topic', '', 'text', false);
+                break;
+
+            case 'precis_writing':
+                content += createInput(`${id_prefix}_marks`, 'کل نمبر', config.marks, 'text', isUrdu);
+                content += createTextarea(`${id_prefix}_passage`, 'تلخیص کے لیے عبارت', isUrdu, 6);
+                break;
+
+            case 'stanza_context':
+                content += createTextarea(`${id_prefix}_stanza`, 'Stanza for Explanation', false, 4);
+                content += createInput(`${id_prefix}_stanza_marks`, 'Stanza Marks', config.stanza_marks, 'text', false);
+                content += `<hr class="my-4">`;
+                content += createTextarea(`${id_prefix}_punctuation`, 'Text for Punctuation', false, 4);
+                content += createInput(`${id_prefix}_punc_marks`, 'Punctuation Marks', config.punc_marks, 'text', false);
+                content += `<hr class="my-4">`;
+                content += createInput(`${id_prefix}_pair_provide`, 'Pairs to Provide', 8, 'number', false);
+                content += createInput(`${id_prefix}_pair_attempt`, 'Pairs to Attempt', 5, 'number', false);
+                content += createInput(`${id_prefix}_pair_marks`, 'Pair Marks', config.pair_marks, 'text', false);
+                content += `<div id="${id_prefix}_inputs"></div>`;
+                break;
+
+            case 'summary_paraphrase':
+                content += createInput(`${id_prefix}_marks`, 'Total Marks', config.marks, 'text', false);
+                content += createInput(`${id_prefix}_poem_title`, 'Poem for Summary', '', 'text', false);
+                content += `<p class="text-center font-bold my-2">OR</p>`;
+                content += createTextarea(`${id_prefix}_stanza`, 'Stanza for Paraphrasing', false, 4);
+                break;
+            
+            case 'comprehension':
+                content += createInput(`${id_prefix}_marks`, isUrdu ? 'کل نمبر' : 'Total Marks', config.marks, 'text', isUrdu);
+                content += createTextarea(`${id_prefix}_passage`, isUrdu ? 'پیراگراف' : 'Passage', isUrdu, 5);
+                content += `<div class="sub-block" id="${id_prefix}_inputs"></div>`;
+                break;
+
+            case 'urdu_para_translation':
+            case 'para_translation_urdu':
+            case 'para_translation_english':
+                content += createInput(`${id_prefix}_marks`, 'Total Marks', config.marks, 'text', false);
+                content += createTextarea(`${id_prefix}_passage`, 'Passage for Translation', isUrdu, 5);
+                break;
+            
+            case 'poem_summary_idea':
+                content += createInput(`${id_prefix}_marks`, 'کل نمبر', config.marks, 'text', isUrdu);
+                content += createInput(`${id_prefix}_topic`, 'نظم کا عنوان', '', 'text', isUrdu);
+                break;
+
+            default:
+                content = `<p class="text-red-500">Form generator for type "<code>${config.type}</code>" is not implemented.</p>`;
+        }
+        
+        return `<div class="question-block" id="block_${id_prefix}">
+            <h3 class="${urduClass}">${q_title}: ${config.title}</h3>
+            ${content}
+        </div>`;
+    }
+       
+        function generateDynamicInputs(config, part = '') {
+            const part_suffix = part ? `_${part}` : '';
+            const id_prefix = `${config.type}_${String(config.q_num).replace(/,/g, '_')}`;
+            const container = document.getElementById(`${id_prefix}${part_suffix}_inputs`);
+            if (!container) return;
+
+            const isUrdu = config.lang === 'ur';
+            const urduClass = isUrdu ? 'urdu' : '';
+            const labels = isUrdu ? { q: 'سوال', optA: 'آپشن (ا)', optB: 'آپشن (ب)', optC: 'آپشن (ج)', optD: 'آپشن (د)', para: 'پیراگراف', sher: 'شعر'} : { q: 'Question', optA: 'Option A', optB: 'Option B', optC: 'Option C', optD: 'Option D', para: 'Paragraph', sher: 'Couplet'};
+            
+            let count = 0;
+            let countInput;
+
+            if (part) { // For poetry explanation
+                countInput = document.getElementById(`${id_prefix}_${part}_provide`);
+            } else if (config.type === 'comprehension') {
+                count = config.q_count;
+            } else if (config.type === 'stanza_context') {
+                countInput = document.getElementById(`${id_prefix}_pair_provide`);
+            } else {
+                countInput = document.getElementById(`${id_prefix}_provide`) || document.getElementById(`${id_prefix}_count`);
+            }
+            
+            if(countInput) count = parseInt(countInput.value, 10) || 0;
+
+            let content = '';
+            for (let i = 1; i <= count; i++) {
+                switch(config.type) {
+                    case 'mcq':
+                        content += `<div class="sub-block"><p class="font-bold mb-2 ${urduClass}">${labels.q} #${i}</p>${createTextarea(`${id_prefix}_q${i}`, labels.q, isUrdu)}<div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">${createInput(`${id_prefix}_q${i}_optA`, labels.optA, '', 'text', isUrdu)}${createInput(`${id_prefix}_q${i}_optB`, labels.optB, '', 'text', isUrdu)}${createInput(`${id_prefix}_q${i}_optC`, labels.optC, '', 'text', isUrdu)}${createInput(`${id_prefix}_q${i}_optD`, labels.optD, '', 'text', isUrdu)}</div></div>`;
+                        break;
+                    case 'para_translation_english':
+                    case 'prose_explanation':
+                    case 'prose_explanation_context':
+                        content += createTextarea(`${id_prefix}_q${i}`, `${labels.para} #${i}`, isUrdu, 4);
+                        break;
+                    case 'stanza_context': // For pairs of words
+                        content += createInput(`${id_prefix}_pair${i}`, `Pair #${i}`, '', 'text', false);
+                        break;
+                    case 'poetry_explanation':
+                        content += createTextarea(`${id_prefix}_${part}_q${i}`, `${labels.sher} #${i}`, isUrdu, 2);
+                        break;
+                    case 'comprehension':
+                        content += createInput(`${id_prefix}_q${i}`, `${isUrdu ? 'سوال' : 'Question'} #${i}`, '', 'text', isUrdu);
+                        break;
+                    default:
+                        const itemLabel = (config.type.match(/sentence|speech|voice/)) ? 'Sentence' : (config.type.match(/word|idiom|pair/)) ? 'Word/Phrase' : (isUrdu ? 'عنوان' : 'Topic');
+                        content += createInput(`${id_prefix}_q${i}`, `${isUrdu ? 'آئٹم' : itemLabel} #${i}`, '', 'text', isUrdu);
+                        break;
+                }
+            }
+            container.innerHTML = content;
+        }
+        
+        function addDynamicInputListeners(config) {
+            const id_prefix = `${config.type}_${String(config.q_num).replace(/,/g, '_')}`;
+            if (config.type === 'poetry_explanation') {
+                const parts = ['nazm', 'ghazal'];
+                parts.forEach(part => {
+                    const countInput = document.getElementById(`${id_prefix}_${part}_provide`);
+                    generateDynamicInputs(config, part); // Initial generation
+                    if(countInput) {
+                        countInput.addEventListener('input', () => generateDynamicInputs(config, part));
+                    }
+                });
+            } else {
+                let countInputId = `${id_prefix}_provide`;
+                if (config.type === 'stanza_context') {
+                    countInputId = `${id_prefix}_pair_provide`;
+                } else if (config.type === 'mcq') {
+                    countInputId = document.getElementById(`${id_prefix}_provide`) ? `${id_prefix}_provide` : `${id_prefix}_count`;
+                }
+
+                const countInput = document.getElementById(countInputId);
+                
+                generateDynamicInputs(config); // Initial generation
+                if (countInput) {
+                    countInput.addEventListener('input', () => generateDynamicInputs(config));
+                }
+            }
+        }
+        
+        function showStep(pageId, step) {
+            const page = document.getElementById(pageId);
+            if (!page) return;
+            page.querySelectorAll('.wizard-step').forEach(el => el.style.display = 'none');
+            const activeStep = page.querySelector(`#step-${step}`);
+            if (activeStep) activeStep.style.display = 'block';
+            currentWizardStep = step;
+            window.scrollTo(0, 0);
+        }
+
+        function nextStep(button) {
+            const pageId = button.closest('.page').id;
+            if (currentWizardStep < totalWizardSteps) showStep(pageId, currentWizardStep + 1);
+        }
+        function prevStep(button) {
+            const pageId = button.closest('.page').id;
+            if (currentWizardStep > 1) showStep(pageId, currentWizardStep - 1);
+        }
+
+        function generateChapterLqFields() {
+            const count = parseInt(document.getElementById('chapter_lq_count').value) || 0;
+            const container = document.getElementById('chapter_lq_fields_container');
+            if (!container) return;
+            container.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                const qNum = 3 + i;
+                 container.innerHTML += `<div class="sub-block">
+                    <p class="font-bold mb-2">Question #${qNum}</p>
+                    ${createTextarea(`long_questions_chapterwise_3_q${qNum}_a`, 'Part (A)')}
+                    ${createTextarea(`long_questions_chapterwise_3_q${qNum}_b`, 'Part (B)')}
+                </div>`;
+            }
+        }
+
+        // --- Main Page Creation and Wizard Initialization ---
+        function createPaperPage(pageId, grade, subject, paperType) {
+            let structure;
+            const paperTypeKey = paperType.replace(/ /g, '_');
+            if (paperTypeKey === 'Chapter_Wise') {
+                if (subject === 'Urdu') {
+                    showAppMessage('Not Available', 'Chapter Wise mode is not available for Urdu. Please select "Full/Half Book".');
+                    return;
+                }
+                structure = paperStructures.Chapter_Wise.default;
+            } else {
+                let structureKey = `${grade}_${subject}`;
+                if (['Physics', 'Chemistry', 'Biology'].includes(subject)) {
+                    structureKey = (grade === '11' || grade === '12') ? 'Science_Intermediate' : 'Science';
+                }
+                structure = paperStructures.Full_Half_Book[structureKey];
+            }
+
+            if (!structure) {
+                showAppMessage('Error', 'No paper structure defined for this selection.');
+                return;
+            }
+            
+            totalWizardSteps = structure.length;
+            const wizardHtml = structure.map((config, index) => {
+                const stepNumber = index + 1;
+                const isUrdu = config.lang === 'ur';
+                return `<div id="step-${stepNumber}" class="wizard-step">
+                    ${createQuestionBlock(config)}
+                    <div class="mt-8 flex justify-between">
+                        <button type="button" onclick="prevStep(this)" class="btn btn-secondary ${stepNumber === 1 ? 'invisible' : ''}">${isUrdu ? '→ پچھلا' : '← Back'}</button>
+                        ${stepNumber === totalWizardSteps
+                            ? `<button type="button" onclick="generatePaper(this)" class="btn btn-success">${isUrdu ? '✓ پیپر بنائیں' : '✓ Generate Paper'}</button>`
+                            : `<button type="button" onclick="nextStep(this)" class="btn btn-primary">${isUrdu ? 'اگلا ←' : 'Next →'}</button>`
+                        }
+                    </div>
+                </div>`;
+            }).join('');
+            
+            const shellTemplate = document.getElementById('wizard-shell-template').innerHTML;
+            const pageContainer = document.getElementById('paper-pages-container');
+            const pageDiv = document.createElement('div');
+            pageDiv.id = pageId;
+            pageDiv.className = 'page p-4 md:p-8';
+            pageDiv.innerHTML = `
+                <main class="flex-grow w-full">
+                     <div id="wizard-header" class="flex items-center justify-between no-print mb-6 max-w-5xl mx-auto">
+                         <button onclick="navigateBack()" class="btn btn-secondary">← Back to Menu</button>
+                         <div class="flex items-center gap-3">
+                             <img src="https://i.postimg.cc/Dzz5bbVt/Picture1.jpg" alt="Logo" class="w-12 h-12 rounded-full object-cover">
+                             <h1 class="text-2xl font-bold text-center text-gray-800">${subject} - Class ${grade}th - ${paperType.replace(/_/g, ' ')}</h1>
+                         </div>
+                         <div style="width: 150px;"></div>
+                     </div>
+                    ${shellTemplate}
+                </main>
+            `;
+            pageContainer.appendChild(pageDiv);
+            
+            const formContainer = pageDiv.querySelector('#paper-form');
+            formContainer.innerHTML = wizardHtml;
+
+            structure.forEach(addDynamicInputListeners);
+
+            if (pageId.includes('chapter_wise')) {
+                setTimeout(generateChapterLqFields, 0);
+            }
+            
+            showStep(pageId, 1);
+            createdPages.add(pageId);
+        }
+
+        // --- Paper Generation and Preview Logic (REVISED TO AVOID BLANK SECTIONS) ---
+        function generatePaper(button) {
+            const page = button.closest('.page');
+            const getValue = id => page.querySelector(`#${id}`)?.value || '';
+            const getNum = id => parseInt(page.querySelector(`#${id}`)?.value, 10) || 0;
+            
+            const [_, __, grade, subjectRaw, paperTypeKey] = page.id.split('-');
+            const subject = subjectRaw.charAt(0).toUpperCase() + subjectRaw.slice(1);
+            const totalMarks = getValue('header_total_marks');
+            const totalTime = getValue('header_total_time');
+            const isUrdu = subject.toLowerCase() === 'urdu';
+
+            let objectiveContentHtml = '';
+            let subjectiveContentHtml = '';
+
+            let structure;
+            if (paperTypeKey === 'chapter_wise') {
+                structure = paperStructures.Chapter_Wise.default;
+            } else {
+                let structureKey = `${grade}_${subject}`;
+                if (['Physics', 'Chemistry', 'Biology'].includes(subject)) {
+                    structureKey = (grade === '11' || grade === '12') ? 'Science_Intermediate' : 'Science';
+                }
+                structure = paperStructures.Full_Half_Book[structureKey];
+            }
+            
+            if (!structure) {
+                showAppMessage('Error', `Could not find structure for ${grade}_${subject}`);
+                return;
+            }
+
+            structure.forEach(config => {
+                if (config.type === 'header') return; 
+
+                const id_prefix = `${config.type}_${String(config.q_num).replace(/,/g, '_')}`;
+                const title = config.title;
+                const q_num = config.q_num;
+                
+                try {
+                    let sectionHtml = '';
+                    let hasContent = false;
+
+                    switch(config.type) {
+                        case 'mcq':
+                        case 'short_questions':
+                        case 'short_questions_set':
+                        case 'words_in_sentences':
+                        case 'direct_indirect':
+                        case 'pair_of_words':
+                        case 'voice_change':
+                        case 'essay_paragraph':
+                        case 'urdu_sentences_translation':
+                        case 'sentence_correction_idioms':
+                        case 'idioms_phrasal_verbs':
+                        case 'lesson_summary':
+                        case 'essay':
+                            const provide = getNum(`${id_prefix}_provide`) || getNum(`${id_prefix}_count`);
+                            let questions = [];
+                            for (let i = 1; i <= provide; i++) {
+                                if(config.type === 'mcq'){
+                                    const qValue = getValue(`${id_prefix}_q${i}`);
+                                    const opts = ['A', 'B', 'C', 'D'].map(opt => getValue(`${id_prefix}_q${i}_opt${opt.toUpperCase()}`));
+                                    if (qValue.trim()) {
+                                        hasContent = true;
+                                        questions.push(`<div class="question-item"><b>(${i})</b> ${qValue}<div style="display: flex; justify-content: space-around; margin-top: 5px; padding-${isUrdu ? 'right' : 'left'}: 20px;"><span><b>A)</b> ${opts[0]}</span><span><b>B)</b> ${opts[1]}</span><span><b>C)</b> ${opts[2]}</span><span><b>D)</b> ${opts[3]}</span></div></div>`);
+                                    }
+                                } else {
+                                    const qValue = getValue(`${id_prefix}_q${i}`);
+                                    if (qValue.trim()) {
+                                        hasContent = true;
+                                        questions.push(`<div class="question-item"><b>(${i})</b> ${qValue}</div>`);
+                                    }
+                                }
+                            }
+                            if (hasContent) {
+                                const marks = getValue(`${id_prefix}_marks`);
+                                const attempt = getValue(`${id_prefix}_attempt`);
+                                let instruction = config.type === 'mcq' ? (isUrdu ? 'درست جواب کا انتخاب کریں۔' : 'Choose the correct option.') : (isUrdu ? `کوئی ${attempt} سوالات حل کریں۔` : `Attempt any ${attempt} of the following.`);
+                                sectionHtml = `<div class="question-title"><span>${isUrdu ? `سوال نمبر ${q_num}:` : `Q-${q_num}:`} ${instruction}</span><span class="marks">${isUrdu ? 'نمبر' : 'Marks'}: ${marks}</span></div><div class="question-content">${questions.join('')}</div>`;
+                                if (config.type === 'mcq') objectiveContentHtml += sectionHtml;
+                                else subjectiveContentHtml += sectionHtml;
+                            }
+                            break;
+
+                        case 'long_questions':
+                            const q_nums = String(config.q_num).split(',');
+                            let lq_questions = '';
+                            q_nums.forEach(qNum => {
+                                const partA = getValue(`${id_prefix}_q${qNum}_a`);
+                                const partB = getValue(`${id_prefix}_q${qNum}_b`);
+                                if (partA.trim() || partB.trim()) {
+                                    hasContent = true;
+                                    lq_questions += `<div class="question-title" style="font-weight:normal; margin-top:15px;"><b>${isUrdu ? `سوال نمبر ${qNum}`: `Q-${qNum}`}</b></div><div class="question-content"><div class="long-question-part"><b>(A)</b> ${partA}</div><div class="long-question-part"><b>(B)</b> ${partB}</div></div>`;
+                                }
+                            });
+                            if (hasContent) {
+                                const marks = getValue(`${id_prefix}_marks`);
+                                const attempt = getValue(`${id_prefix}_attempt`);
+                                sectionHtml = `<div class="section-title" style="margin-top: 40px;">${isUrdu ? 'حصہ دوم' : 'Section II'}</div><div class="question-title"><span>${isUrdu ? `نوٹ: کوئی سے ${attempt} سوالات کے جوابات دیں۔` : `Note: Attempt any ${attempt} questions.`}</span><span class="marks">Marks: ${marks}</span></div>${lq_questions}`;
+                                subjectiveContentHtml += sectionHtml;
+                            }
+                            break;
+                        
+                        case 'long_questions_chapterwise':
+                             const lqCount = getNum('chapter_lq_count');
+                             let chap_lq_questions = '';
+                             for(let i=0; i<lqCount; i++){
+                                const qNum = 3 + i;
+                                const partA = getValue(`${id_prefix}_q${qNum}_a`);
+                                const partB = getValue(`${id_prefix}_q${qNum}_b`);
+                                if (partA.trim() || partB.trim()) {
+                                    hasContent = true;
+                                    chap_lq_questions += `<div class="question-title" style="font-weight:normal; margin-top:15px;"><b>Q-${qNum}</b></div><div class="question-content"><div class="long-question-part"><b>(A)</b> ${partA}</div><div class="long-question-part"><b>(B)</b> ${partB}</div></div>`;
+                                }
+                             }
+                             if(hasContent){
+                                const marks = getValue(`${id_prefix}_marks`);
+                                const attempt = getValue(`${id_prefix}_attempt`);
+                                sectionHtml = `<div class="section-title" style="margin-top: 40px;">Section II</div><div class="question-title"><span>Note: Attempt any ${attempt} questions.</span><span class="marks">Marks: ${marks}</span></div>${chap_lq_questions}`;
+                                subjectiveContentHtml += sectionHtml;
+                             }
+                             break;
+
+                        case 'para_translation_english':
+                        case 'urdu_para_translation':
+                        case 'para_translation_urdu':
+                        case 'precis_writing':
+                        case 'comprehension':
+                            const passage = getValue(`${id_prefix}_passage`);
+                            if (passage.trim()) {
+                                hasContent = true;
+                                let passageQuestions = '';
+                                if (config.type === 'comprehension') {
+                                    const q_count = config.q_count;
+                                    for(let i=1; i<=q_count; i++) {
+                                        const qValue = getValue(`${id_prefix}_q${i}`);
+                                        if(qValue.trim()){
+                                           passageQuestions += `<div class="question-item"><b>(${i})</b> ${qValue}</div>`;
+                                        }
+                                    }
+                                }
+                                const marks = getValue(`${id_prefix}_marks`);
+                                sectionHtml = `<div class="question-title"><span>${isUrdu ? `سوال نمبر ${q_num}: ${title}`: `Q-${q_num}: ${title}`}</span><span class="marks">Marks: ${marks}</span></div><div class="question-content" style="border:1px dashed #ccc; padding:10px;">${passage.replace(/\n/g, '<br>')}</div><div class="question-content">${passageQuestions}</div>`;
+                                subjectiveContentHtml += sectionHtml;
+                            }
+                            break;
+                        
+                        default:
+                            break;
+                    }
+                } catch(e) {
+                    console.error(`Error processing question type: ${config.type}`, e);
+                    subjectiveContentHtml += `<p class="text-red-500 font-bold">Error generating Q-${q_num}. Check console.</p>`;
+                }
+            });
+
+            let pagesHtml = '';
+
+            if (objectiveContentHtml.trim() !== '') {
+                pagesHtml += `
+                <div class="paper-page">
+                    <table class="main-header-table" ${isUrdu ? 'dir="ltr"' : ''}><tr>
+                        <td class="logo-cell"><img src="https://i.postimg.cc/Dzz5bbVt/Picture1.jpg" alt="Logo" style="width: 80px;"></td>
+                        <td class="academy-header-print"><div class="academy-name">The I.L.M.I Academy Science & Commerce</div><div class="academy-address">Kahna Nau, Lahore</div></td>
+                    </tr></table>
+                    <table class="details-header-table">
+                        <tr><td>${isUrdu ? 'پرچہ' : 'Subject'}:</td><td>${subject}</td><td>${isUrdu ? 'نام' : 'Name'}:</td><td></td></tr>
+                        <tr><td>${isUrdu ? 'کلاس' : 'Class'}:</td><td>${grade}th</td><td>${isUrdu ? 'رول نمبر' : 'Roll No'}:</td><td></td></tr>
+                        <tr><td>${isUrdu ? 'کل نمبر' : 'Total Marks'}:</td><td>${totalMarks}</td><td>${isUrdu ? 'تاریخ' : 'Date'}:</td><td></td></tr>
+                        <tr><td>${isUrdu ? 'کل وقت' : 'Time'}:</td><td>${totalTime}</td><td colspan="2" style="text-align:center;"><b>${isUrdu ? 'حصہ معروضی' : 'Objective Part'}</b></td></tr>
+                    </table>
+                    ${objectiveContentHtml}
+                </div>`;
+            }
+
+            if (subjectiveContentHtml.trim() !== '') {
+                pagesHtml += `
+                <div class="paper-page">
+                    <table class="main-header-table" ${isUrdu ? 'dir="ltr"' : ''}><tr>
+                        <td class="logo-cell"><img src="https://i.postimg.cc/Dzz5bbVt/Picture1.jpg" alt="Logo" style="width: 80px;"></td>
+                        <td class="academy-header-print"><div class="academy-name">The I.L.M.I Academy Science & Commerce</div><div class="academy-address">Kahna Nau, Lahore</div></td>
+                    </tr></table>
+                    <div class="section-title">${isUrdu ? 'حصہ انشائیہ' : 'Subjective Part'}</div>
+                    ${subjectiveContentHtml}
+                </div>`;
+            }
+
+            if (pagesHtml.trim() === '') {
+                showAppMessage('No Content', 'Could not generate paper because no questions were found. Please fill in the form.');
+                return;
+            }
+
+            const finalPaperHtml = `<div class="paper-container ${isUrdu ? 'urdu' : ''}" contenteditable="true">${pagesHtml}</div>`;
+            
+            const previewContainer = page.querySelector('#paper-preview-container');
+            const formContainer = page.querySelector('#generator-container');
+            const display = page.querySelector('#final-paper-display');
+            
+            display.innerHTML = finalPaperHtml;
+            formContainer.style.display = 'none';
+            
+            const wizardHeader = page.querySelector('#wizard-header');
+            if (wizardHeader) wizardHeader.style.display = 'none';
+            previewContainer.classList.remove('hidden');
+        }
+
+        function goBackToEdit(button) {
+            const page = button.closest('.page');
+            if (page) {
+                page.querySelector('#generator-container').style.display = 'block';
+                page.querySelector('#paper-preview-container').classList.add('hidden');
+                const wizardHeader = page.querySelector('#wizard-header');
+                if (wizardHeader) wizardHeader.style.display = 'flex';
+            }
+        }
+    
+        function printGeneratedPaper(button) {
+            const pageContainer = button.closest('.page');
+            if (!pageContainer) { return; }
+            const paperContainer = pageContainer.querySelector('.paper-container');
+            if (!paperContainer) { return; }
+            const paperClone = paperContainer.cloneNode(true);
+            paperClone.id = 'printable-paper-area';
+            document.body.appendChild(paperClone);
+            document.body.classList.add('is-printing');
+            window.print();
+            setTimeout(() => {
+                document.body.removeChild(paperClone);
+                document.body.classList.remove('is-printing');
+            }, 500);
+        }
+
+        function showAdvancedStep(step) {
+            document.querySelectorAll('#advanced-generator-container .wizard-step').forEach(el => el.style.display = 'none');
+            const activeStep = document.getElementById(`advanced-step-${step}`);
+            if (activeStep) activeStep.style.display = 'block';
+            currentAdvancedStep = step;
+            window.scrollTo(0, 0);
+        }
+
+        function buildAndGoToMcqStep() {
+            const count = parseInt(document.getElementById('advanced_mcq_count').value) || 0;
+            const container = document.getElementById('advanced-mcq-container');
+            container.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                addMcqInput(i + 1);
+            }
+            showAdvancedStep(2);
+        }
+
+        function addMcqInput(number) {
+            const container = document.getElementById('advanced-mcq-container');
+            const count = number || container.children.length + 1;
+            const mcqBlock = document.createElement('div');
+            mcqBlock.className = 'sub-block mcq-item';
+            mcqBlock.innerHTML = `
+                <div class="flex justify-between items-center mb-2">
+                    <p class="font-bold">MCQ #${count}</p>
+                    <button type="button" onclick="this.parentElement.parentElement.remove()" class="btn btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">🗑️</button>
+                </div>
+                ${createTextarea(`advanced_mcq_question_${count}`, 'MCQ Question')}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
+                    ${createInput(`advanced_mcq_q${count}_optA`, 'Option A')}
+                    ${createInput(`advanced_mcq_q${count}_optB`, 'Option B')}
+                    ${createInput(`advanced_mcq_q${count}_optC`, 'Option C')}
+                    ${createInput(`advanced_mcq_q${count}_optD`, 'Option D')}
+                </div>
+                 ${createInput(`advanced_mcq_q${count}_correct`, 'Correct Answer (e.g., A)')}
+            `;
+            container.appendChild(mcqBlock);
+        }
+
+        function buildAndGoToSqStep() {
+            const sectionCount = parseInt(document.getElementById('advanced_sq_sections').value) || 0;
+            const container = document.getElementById('advanced-sq-container');
+            container.innerHTML = '';
+            for (let i = 0; i < sectionCount; i++) {
+                addSqSection(i + 1);
+            }
+            showAdvancedStep(3);
+        }
+        
+        function addSqSection(number) {
+            const container = document.getElementById('advanced-sq-container');
+            const count = number || container.children.length + 1;
+            const questionsPerSection = parseInt(document.getElementById('advanced_sq_per_section').value) || 8;
+            let questionInputs = '';
+            for(let i=1; i<=questionsPerSection; i++){
+                questionInputs += createTextarea(`advanced_sq_sec${count}_q${i}`, `SQ #${i}`);
+            }
+            const sectionBlock = document.createElement('div');
+            sectionBlock.className = 'question-block';
+            sectionBlock.innerHTML = `<h3>Short Questions Section ${String.fromCharCode(64 + count)}</h3>${questionInputs}`;
+            container.appendChild(sectionBlock);
+        }
+
+        function buildAndGoToLqStep() {
+            const count = parseInt(document.getElementById('advanced_lq_count').value) || 0;
+            const container = document.getElementById('advanced-lq-container');
+            container.innerHTML = '';
+            const hasParts = document.getElementById('advanced_lq_parts').checked;
+            for (let i = 0; i < count; i++) {
+                const lqBlock = document.createElement('div');
+                lqBlock.className = 'sub-block lq-item';
+                let content = `<p class="font-bold mb-2">Long Question #${i + 1}</p>${createTextarea(`advanced_lq_q${i + 1}`, 'Main Question')}`;
+                if(hasParts){
+                    content += createTextarea(`advanced_lq_q${i + 1}_partA`, 'Part A (Optional)');
+                    content += createTextarea(`advanced_lq_q${i + 1}_partB`, 'Part B (Optional)');
+                }
+                lqBlock.innerHTML = content;
+                container.appendChild(lqBlock);
+            }
+            showAdvancedStep(4);
+        }
+
+    function generateAdvancedPaper() {
+        const getValue = id => document.getElementById(id)?.value || '';
+        const getNum = id => parseInt(document.getElementById(id)?.value) || 0;
+
+        const paperData = {
+            class: getValue('advanced_class'),
+            term: getValue('advanced_term'),
+            subject: getValue('advanced_subject'),
+            totalTime: 'As Per Board Policy',
+        };
+        
+        let objectiveContentHtml = '';
+        let subjectiveContentHtml = '';
+
+        const mcqItems = document.querySelectorAll('#advanced-mcq-container .mcq-item');
+        const filledMcqs = Array.from(mcqItems).filter(mcq => mcq.querySelector(`textarea[id^="advanced_mcq_question_"]`).value.trim() !== '');
+
+        if (filledMcqs.length > 0) {
+            let mcqHtml = filledMcqs.map((mcq, i) => {
+                const qNum = mcq.querySelector('p').textContent.match(/\d+/)[0];
+                const q = getValue(`advanced_mcq_question_${qNum}`);
+                const opts = ['A', 'B', 'C', 'D'].map(opt => getValue(`advanced_mcq_q${qNum}_opt${opt}`));
+                return `<div class="question-item"><b>(${i + 1})</b> ${q}<div style="display: flex; justify-content: space-around; margin-top: 5px; padding-left: 20px;"><span><b>A)</b> ${opts[0]}</span><span><b>B)</b> ${opts[1]}</span><span><b>C)</b> ${opts[2]}</span><span><b>D)</b> ${opts[3]}</span></div></div>`;
+            }).join('');
+            objectiveContentHtml += `<div class="question-title"><span>Q-1: Choose the correct option.</span><span class="marks">Marks: ${filledMcqs.length}</span></div>`;
+            objectiveContentHtml += `<div class="question-content">${mcqHtml}</div>`;
+        }
+
+        const sqSections = document.querySelectorAll('#advanced-sq-container .question-block');
+        const sqAttempt = getNum('advanced_sq_attempt');
+        let hasAnySqContent = false;
+        let sqSectionsHtml = '';
+
+        sqSections.forEach((sec, i) => {
+            const questions = Array.from(sec.querySelectorAll('textarea')).map(input => input.value);
+            const hasSectionContent = questions.some(q => q.trim() !== '');
+            if (hasSectionContent) {
+                hasAnySqContent = true;
+                let sqHtml = questions.filter(q => q.trim() !== '').map((q, j) => `<div class="question-item"><b>(${j + 1})</b> ${q}</div>`).join('');
+                sqSectionsHtml += `<div class="question-title"><span>Q-${i+2}: Attempt any ${sqAttempt} questions.</span><span class="marks">Marks: ${sqAttempt * 2}</span></div>`;
+                sqSectionsHtml += `<div class="question-content">${sqHtml}</div>`;
+            }
+        });
+
+        if (hasAnySqContent) {
+            subjectiveContentHtml += `<div class="section-title">Section I</div>` + sqSectionsHtml;
+        }
+        
+        const lqItems = document.querySelectorAll('#advanced-lq-container .lq-item');
+        const lqAttempt = getNum('advanced_lq_attempt');
+        const hasParts = document.getElementById('advanced_lq_parts').checked;
+        let hasAnyLqContent = false;
+        let lqSectionsHtml = '';
+        const lqSectionNumStart = 2 + sqSections.length;
+
+        lqItems.forEach((lq, i) => {
+            const qNum = lq.querySelector('p').textContent.match(/\d+/)[0];
+            const mainQ = getValue(`advanced_lq_q${qNum}`);
+            const partA = hasParts ? getValue(`advanced_lq_q${qNum}_partA`) : '';
+            const partB = hasParts ? getValue(`advanced_lq_q${qNum}_partB`) : '';
+
+            if (mainQ.trim() || partA.trim() || partB.trim()) {
+                hasAnyLqContent = true;
+                lqSectionsHtml += `<div class="question-title" style="font-weight:normal; margin-top:15px;"><b>Q-${lqSectionNumStart + i}</b> ${mainQ}</div>`;
+                if(hasParts){
+                     lqSectionsHtml += `<div class="question-content"><div class="long-question-part"><b>(A)</b> ${partA}</div><div class="long-question-part"><b>(B)</b> ${partB}</div></div>`;
+                }
+            }
+        });
+
+        if (hasAnyLqContent) {
+            subjectiveContentHtml += `<div class="section-title">Section II</div>`;
+            subjectiveContentHtml += `<div class="question-title"><span>Note: Attempt any ${lqAttempt} questions.</span></div>`;
+            subjectiveContentHtml += lqSectionsHtml;
+        }
+
+        let pagesHtml = '';
+        
+        if(objectiveContentHtml.trim() !== '') {
+            pagesHtml += `
+            <div class="paper-page">
+                <table class="main-header-table"><tr>
+                    <td class="logo-cell"><img src="https://i.postimg.cc/Dzz5bbVt/Picture1.jpg" alt="Logo" style="width: 80px;"></td>
+                    <td class="academy-header-print"><div class="academy-name">The I.L.M.I Academy Science & Commerce</div><div class="academy-address">Kahna Nau, Lahore</div></td>
+                </tr></table>
+                <table class="details-header-table">
+                    <tr><td>Subject:</td><td>${paperData.subject}</td><td>Name:</td><td></td></tr>
+                    <tr><td>Class:</td><td>${paperData.class}</td><td>Roll No:</td><td></td></tr>
+                    <tr><td>Total Marks:</td><td>${getNum('advanced_mcq_count') + (getNum('advanced_sq_sections') * getNum('advanced_sq_attempt') * 2)}</td><td>Date:</td><td></td></tr>
+                    <tr><td>Time:</td><td>${paperData.totalTime}</td><td colspan="2" style="text-align:center;"><b>Objective Part</b></td></tr>
+                </table>
+                ${objectiveContentHtml}
+            </div>`;
+        }
+
+        if (subjectiveContentHtml.trim() !== '') {
+             pagesHtml += `
+             <div class="paper-page">
+                <table class="main-header-table"><tr>
+                    <td class="logo-cell"><img src="https://i.postimg.cc/Dzz5bbVt/Picture1.jpg" alt="Logo" style="width: 80px;"></td>
+                    <td class="academy-header-print"><div class="academy-name">The I.L.M.I Academy Science & Commerce</div><div class="academy-address">Kahna Nau, Lahore</div></td>
+                </tr></table>
+                <div class="section-title">Subjective Part</div>
+                ${subjectiveContentHtml}
+            </div>`;
+        }
+
+
+        if (pagesHtml.trim() === '') {
+            showAppMessage('No Content', 'Could not generate paper because no questions were entered.');
+            return;
+        }
+
+        const finalPaperHtml = `<div class="paper-container" contenteditable="true">${pagesHtml}</div>`;
+
+        document.getElementById('advanced-final-paper-display').innerHTML = finalPaperHtml;
+        document.getElementById('advanced-generator-container').style.display = 'none';
+        document.getElementById('advanced-wizard-header').style.display = 'none';
+        document.getElementById('advanced-paper-preview-container').classList.remove('hidden');
+    }
+
+    function goBackToAdvancedForm(){
+         document.getElementById('advanced-generator-container').style.display = 'block';
+            document.getElementById('advanced-wizard-header').style.display = 'flex';
+            document.getElementById('advanced-paper-preview-container').classList.add('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // MODIFIED: Start on the correct initial page
+             navigateTo('page-testgen-menu'); 
+             showAdvancedStep(1);
+        });
+    </script>
+</body>
+</html>
+
