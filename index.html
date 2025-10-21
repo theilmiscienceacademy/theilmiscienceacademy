@@ -345,10 +345,23 @@
                 <div class="flex gap-4">
                     <button onclick="signInWithEmail()" class="btn btn-primary text-lg w-full">🔑 Login</button>
                 </div>
+				<div class="mt-4 text-center">
+					<a href="https://theilmiscienceacademy.github.io/theilmiscienceacademy/testgeneration.html"
+					   target="_blank"
+					   class="text-sm text-gray-600 hover:text-gray-900 hover:underline">
+						📝 Access the Test Generator
+					</a>
+			</div>
             </div>
             <div id="user-profile" class="hidden items-center justify-center flex-col space-y-4 pt-4">
                 <p id="user-name" class="font-semibold text-gray-700 text-xl"></p>
                 <button id="proceed-btn" onclick="navigateTo('page-2-main-dashboard')" class="btn btn-success text-lg py-3 w-full" disabled>🚀 Proceed to Portal</button>
+				<div> <a href="https://theilmiscienceacademy.github.io/theilmiscienceacademy/testgeneration.html"
+					   target="_blank"
+					   class="text-sm text-gray-600 hover:text-gray-900 hover:underline">
+						📝 Access the Test Generator
+					</a>
+				</div>
                 <button onclick="signOutUser()" class="text-sm text-gray-500 hover:underline">Sign Out</button>
             </div>
         </div>
@@ -1664,6 +1677,28 @@
         }
     });
 
+    // **** PASTE NETWORK STATUS CODE BLOCK HERE ****
+    function updateOnlineStatus() {
+        const isOnline = navigator.onLine;
+        console.log(`Network status changed: ${isOnline ? 'Online' : 'Offline'}`);
+        if (!isOnline) {
+            showToast("⚠️ You appear to be offline. Changes may not save.", "error");
+            // Optionally disable save buttons, etc.
+            document.querySelectorAll('.btn-success, .btn-primary').forEach(btn => btn.disabled = true);
+        } else {
+            showToast("✅ Network connection restored.", "success");
+            // Re-enable buttons (consider re-checking session here too)
+            applyRoleBasedUI(); // Re-apply UI rules which might re-enable buttons
+        }
+    }
+
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+
+    // Initial check on load
+    // updateOnlineStatus(); // You can uncomment this if you want an immediate check on script load
+    // **** END OF NETWORK STATUS CODE BLOCK ****
+
     const updateAuthUI = async (user) => {
         if (user) {
             currentUser = user;
@@ -1903,6 +1938,51 @@
 		}
 	};
 
+    document.addEventListener('visibilitychange', async () => { // Added async here
+        // This checks if the user has returned to this browser tab
+        if (document.visibilityState === 'visible') {
+            console.log("Tab became visible, checking session...");
+
+            // --- START FIX: Re-validate Session ---
+            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+            if (sessionError) {
+                 console.error("Error checking session on visibility change:", sessionError);
+                 // Handle error appropriately, maybe show a generic error message
+                 showToast("Could not verify session.", "error");
+            } else if (session) {
+                 // Session is valid, update UI and potentially refresh data
+                 console.log("Session is valid.");
+                 updateAuthUI(session.user); // Re-sync UI with the current user state & role
+            } else if (currentUser) {
+                 // No valid session, but the app thought a user was logged in.
+                 // This means the session likely expired or became invalid while the tab was inactive.
+                 console.warn("Session invalid or expired on visibility change. Forcing logout.");
+                 showToast("Session expired. Please log in again.", "error");
+                 signOutUser(); // Force logout and UI update via onAuthStateChange
+                 return; // Stop further processing in this listener if logged out
+            } else {
+                 // No session and no user was logged in previously. Do nothing.
+                 console.log("No active session.");
+            }
+            // --- END FIX ---
+
+
+            // --- Original Page-Specific Refresh Logic ---
+            // We only want to refresh the data if the user is still logged in and on the correct page
+            if (currentUser) { // Check if user is still considered logged in after validation
+                 if (currentPageId === 'page-teacher-feedback') {
+                     showToast("🔄 Syncing feedback...", "info");
+                     loadTeacherFeedback();
+                 }
+                 // Add checks and data refreshes for other pages here if needed
+                 // if (currentPageId === 'page-results-saved-results') {
+                 //     openSavedResults(); // Example: Refresh saved results list
+                 // }
+            }
+        }
+    });
+
     // NEW navigateTo function with improved restriction handling
     window.navigateTo = (pageId) => {
         const currentPageElement = document.getElementById(currentPageId);
@@ -1963,6 +2043,38 @@
         toast.classList.add('show');
         setTimeout(() => toast.classList.remove('show'), 3000);
     };
+
+    // **** PASTE RETRY WRAPPER FUNCTION HERE ****
+    async function supabaseCallWrapper(operation, retries = 1) {
+        let lastError = null;
+        for (let i = 0; i <= retries; i++) {
+            try {
+                const { data, error, count } = await operation(); // Execute the Supabase function passed in
+
+                if (error) {
+                    if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                        console.warn(`Supabase call failed (Attempt ${i + 1}/${retries + 1}): Network error.`);
+                        lastError = error;
+                        if (i < retries) {
+                            await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1))); // Wait
+                            continue; // Retry
+                        }
+                    }
+                    throw error; // Throw non-network or final retry failure
+                }
+                return { data, count, error: null }; // Success
+
+            } catch (error) {
+                lastError = error;
+                if (i >= retries) {
+                    break;
+                }
+            }
+        }
+        console.error("Supabase call failed after retries:", lastError);
+        return { data: null, count: null, error: lastError }; // Return error after retries
+    }
+    // **** END OF RETRY WRAPPER FUNCTION ****
 
     // *** NEW ***: Function to show the generic message box as a modal
     window.showSimpleModal = (title, htmlContent) => {
@@ -2894,11 +3006,72 @@ window.addAttendanceToPreview = async () => {
     };
 
     async function _saveToSupabase() {
-        if (!currentUser) { showToast("You must be logged in to save.", "error"); return { success: false }; }
-        const { error: studentError } = await supabase.from('students').upsert({ user_id: currentUser.id, class_name: studentData.className, roll_no: studentData.roll_no, name: studentData.name, fname: studentData.fname }, { onConflict: 'user_id,class_name,roll_no' });
-        if (studentError) { showToast("Error saving student details.", "error"); console.error(studentError); return { success: false, error: studentError }; }
-        const { error: resultError } = await supabase.from('results').upsert({ user_id: currentUser.id, class_name: studentData.className, student_roll_no: studentData.roll_no, term: studentData.term, marks_data: sessionMarks }, { onConflict: 'user_id,class_name,student_roll_no,term' });
-        if (resultError) { showToast("Error saving result data.", "error"); console.error(resultError); return { success: false, error: resultError }; }
+        // --- START FIX: Check Session Before Operation ---
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+        if (sessionError || !session) {
+             showToast("Authentication error. Please log in again.", "error");
+             console.error("Session Error during save attempt:", sessionError);
+             // Optional: Force logout or redirect
+             // signOutUser();
+             return { success: false }; // Stop the function here
+        }
+        // Ensure currentUser is up-to-date if session is valid
+        currentUser = session.user;
+        // --- END FIX ---
+
+        // Original save logic continues...
+        if (!currentUser) { // This check might be redundant now but good for safety
+             showToast("You must be logged in to save.", "error");
+             return { success: false };
+        }
+
+        // Ensure studentData has necessary fields (especially className) before proceeding
+        if (!studentData || !studentData.className || !studentData.roll_no || !studentData.name || !studentData.fname || !studentData.term || !sessionMarks) {
+             showToast("Error: Incomplete data for saving.", "error");
+             console.error("Incomplete data state:", { studentData, sessionMarks });
+             return { success: false };
+        }
+
+
+        // Upsert student details
+        const { error: studentError } = await supabase
+            .from('students')
+            .upsert({
+                user_id: currentUser.id, // Ensure user_id is always set
+                class_name: studentData.className,
+                roll_no: studentData.roll_no,
+                name: studentData.name,
+                fname: studentData.fname
+             }, {
+                onConflict: 'user_id,class_name,roll_no' // Define conflict columns
+             });
+
+        if (studentError) {
+             showToast("Error saving student details.", "error");
+             console.error("Student Upsert Error:", studentError);
+             return { success: false, error: studentError };
+        }
+
+        // Upsert result details
+        const { error: resultError } = await supabase
+            .from('results')
+            .upsert({
+                user_id: currentUser.id, // Ensure user_id is always set
+                class_name: studentData.className,
+                student_roll_no: studentData.roll_no,
+                term: studentData.term,
+                marks_data: sessionMarks
+             }, {
+                onConflict: 'user_id,class_name,student_roll_no,term' // Define conflict columns
+             });
+
+        if (resultError) {
+             showToast("Error saving result data.", "error");
+             console.error("Result Upsert Error:", resultError);
+             return { success: false, error: resultError };
+        }
+
         return { success: true };
     }
 
