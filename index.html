@@ -1719,7 +1719,7 @@
 
     window.copyFeedbackLink = () => {
         // Selects the input field containing the hardcoded link.
-        const linkInput = document.querySelector('.input-group input[value*="bit.ly"]');
+        const linkInput = document.querySelector('.input-group input[value*="https://theilmiscienceacademy.github.io/theilmiscienceacademy/Feedback%20Form.html"]');
 
         // 1. Select the text inside the input field.
         linkInput.select();
@@ -1781,19 +1781,6 @@
 			
 			const newUser = userData.user;
 			if (!newUser) throw new Error("User was created but could not be found.");
-
-			// Step 2: Now, use YOUR ADMIN permissions to insert the new user's role.
-			// Your RLS policy will check if YOU are an admin and allow this.
-			const { error: roleError } = await supabase.from('user_roles').insert({
-				user_id: newUser.id,
-				email: email,
-				role: role
-			});
-
-			if (roleError) {
-				// This error means your RLS policy is not set up correctly.
-				throw new Error("User created, but role could not be set. Check RLS policies.");
-			}
 
 			showToast(`Account created for ${email} with role: ${role}.`, 'success');
 			navigateTo('page-organization-management');
@@ -6379,6 +6366,5 @@ window.addAttendanceToPreview = async () => {
 
 </body>
 </html>
-
 
 
