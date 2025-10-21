@@ -1564,6 +1564,7 @@
     let allUsersCache = []; // NEW: Cache for org management users
 	let allStudentsCache = []; // Keep one good definition
     let filteredStudents = []; // Keep one good definition
+	let userEmailMap = new Map(); // Declare userEmailMap globally
 
 	// New helper function to calculate the starting date (Monday) of the current week
 	const getWeekStartDate = () => {
@@ -6539,5 +6540,6 @@ window.addAttendanceToPreview = async () => {
 
 </body>
 </html>
+
 
 
