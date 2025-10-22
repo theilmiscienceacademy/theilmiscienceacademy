@@ -4544,10 +4544,11 @@ window.addAttendanceToPreview = async () => {
 		}
 		showToast("Fetching all student records...", 'info');
 		
-		// Fetch ALL students for the current user
-		const { data, error } = await supabase.from('students')
+		// New code (fetching ALL students, RLS handles read permission)
+		const { data, error } = await supabase
+			.from('students')
 			.select('*')
-			.eq('user_id', currentUser.id)
+			// .eq('user_id', currentUser.id) <-- Line removed/commented out
 			.order('class_name')
 			.order('roll_no');
 
@@ -6540,6 +6541,5 @@ window.addAttendanceToPreview = async () => {
 
 </body>
 </html>
-
 
 
